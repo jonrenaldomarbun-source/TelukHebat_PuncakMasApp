@@ -1,4 +1,5 @@
 import { CreateWisataDto } from './dto/create-wisata.dto';
+import { UpdateWisataDto } from './dto/update-wisata-dto';
 export declare class WisataController {
     findAll(nama?: string): {
         id: number;
@@ -12,5 +13,23 @@ export declare class WisataController {
         lokasi: string;
         pengunjung: number;
     };
-    create(createWisataDto: CreateWisataDto): typeof CreateWisataDto;
+    create(createWisataDto: CreateWisataDto): {
+        nama: string;
+        lokasi: string;
+        deskripsi: string;
+        fasilitas: string[];
+        hargaTiket: number;
+        jamBuka: string;
+        pengunjung: number;
+    };
+    update(id: string, updateWisataDto: UpdateWisataDto): {
+        nama: string;
+        lokasi: string;
+        deskripsi: string;
+        fasilitas: string[];
+        hargaTiket: number;
+        jamBuka: string;
+        pengunjung: number;
+        id: string;
+    };
 }
