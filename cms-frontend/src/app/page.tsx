@@ -1,35 +1,48 @@
 import Link from "next/link";
-import "./globals.css";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function Home() {
   return (
-    <html lang="en">
-      <body>
-        <div className="flex min-h-screen">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
 
-          {/* SIDEBAR */}
-          <div className="w-64 bg-gray-800 text-white p-4">
-            <h2 className="text-xl font-bold mb-6">PuncakMas CMS</h2>
+      {/* TITLE */}
+      <h1 className="text-4xl font-bold mb-4">
+        PuncakMas CMS
+      </h1>
 
-            <ul className="space-y-2">
-              <li><Link href="/dashboard">Dashboard</Link></li>
-              <li><Link href="/wisata">Wisata</Link></li>
-              <li><Link href="/pengunjung">Pengunjung</Link></li>
-              <li><Link href="/transaksi">Transaksi</Link></li>
-            </ul>
+      <p className="text-gray-600 mb-8 text-center max-w-md">
+        Sistem Informasi Wisata Puncak Mas yang membantu pengelolaan
+        data wisata, transaksi tiket, dan pengunjung secara mudah dan cepat.
+      </p>
+
+      {/* MENU */}
+      <div className="grid grid-cols-2 gap-4">
+
+        <Link href="/dashboard">
+          <div className="bg-white p-6 rounded shadow hover:shadow-lg cursor-pointer text-center">
+            📊 Dashboard
           </div>
+        </Link>
 
-          {/* CONTENT */}
-          <div className="flex-1 p-6 bg-gray-100">
-            {children}
+        <Link href="/wisata">
+          <div className="bg-white p-6 rounded shadow hover:shadow-lg cursor-pointer text-center">
+            🏞️ Data Wisata
           </div>
+        </Link>
 
-        </div>
-      </body>
-    </html>
+        <Link href="/transaksi">
+          <div className="bg-white p-6 rounded shadow hover:shadow-lg cursor-pointer text-center">
+            💰 Transaksi
+          </div>
+        </Link>
+
+        <Link href="/pengunjung">
+          <div className="bg-white p-6 rounded shadow hover:shadow-lg cursor-pointer text-center">
+            👥 Pengunjung
+          </div>
+        </Link>
+
+      </div>
+
+    </div>
   );
 }

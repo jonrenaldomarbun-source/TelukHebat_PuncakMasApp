@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 type TransaksiType = {
   id: number;
@@ -15,6 +15,14 @@ export default function Transaksi() {
   const [nama, setNama] = useState("");
   const [jumlah, setJumlah] = useState(1);
   const [harga, setHarga] = useState(10000);
+
+  // ambil data dari localStorage saat pertama load
+  useEffect(() => {
+    const stored = localStorage.getItem("transaksi");
+    if (stored) {
+      setData(JSON.parse(stored));
+    }
+  }, []);
 
   // format rupiah
   const formatRupiah = (angka: number) => {
@@ -39,16 +47,21 @@ export default function Transaksi() {
       tanggal: new Date().toLocaleDateString(),
     };
 
-    setData([newData, ...data]);
+    const updatedData = [newData, ...data];
+
+    setData(updatedData);
+    localStorage.setItem("transaksi", JSON.stringify(updatedData));
 
     setNama("");
     setJumlah(1);
     setHarga(10000);
   };
 
-  // hapus transaksi
+  // hapus transaksi + update storage
   const handleDelete = (id: number) => {
-    setData(data.filter((item) => item.id !== id));
+    const updatedData = data.filter((item) => item.id !== id);
+    setData(updatedData);
+    localStorage.setItem("transaksi", JSON.stringify(updatedData));
   };
 
   // total semua pemasukan
