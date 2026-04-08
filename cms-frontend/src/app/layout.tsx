@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +28,27 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="bg-gray-100">
+
+  {/* NAVBAR */}
+  <nav className="bg-blue-600 text-white p-4 flex justify-between">
+    <h1 className="font-bold">PuncakMas CMS</h1>
+
+    <div className="flex gap-4">
+      <Link href="/">Home</Link>
+      <Link href="/dashboard">Dashboard</Link>
+      <Link href="/wisata">Wisata</Link>
+      <Link href="/transaksi">Transaksi</Link>
+      <Link href="/pengunjung">Pengunjung</Link>
+    </div>
+  </nav>
+
+  {/* CONTENT */}
+  <main className="p-6">
+    {children}
+  </main>
+
+</body>
     </html>
   );
 }
