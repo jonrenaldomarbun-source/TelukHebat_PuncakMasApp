@@ -55,11 +55,7 @@ export default function Wisata() {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Manajemen Wisata</h1>
 
-        <Link href="/dashboard">
-          <button className="bg-gray-700 text-white px-4 py-2 rounded">
-        ← Kembali
-          </button>
-        </Link>
+        
       </div>
       <div>
        
