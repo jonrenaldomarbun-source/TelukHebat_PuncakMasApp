@@ -3,7 +3,7 @@
 curl -X POST -i http://127.0.0.1:3000/wisata \
   -H "Content-Type: application/json" \
   -d '{
-    "nama": "Puncak Mas",
+    "nama": "Puncak Mas 3",
     "lokasi": "Lampung",
     "deskripsi": "Wisata Bagus",
     "fasilitas": ["Spot Foto", "Cafe"],

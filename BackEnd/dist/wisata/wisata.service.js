@@ -8,10 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.WisataService = void 0;
 const common_1 = require("@nestjs/common");
+const crypto_1 = require("crypto");
 let WisataService = class WisataService {
     wisata = [
         {
-            id: 1,
+            id: (0, crypto_1.randomUUID)(),
             nama: "Puncak Mas",
             lokasi: "Lampung",
             deskripsi: "Wisata pemandangan bukit",
@@ -21,7 +22,7 @@ let WisataService = class WisataService {
             pengunjung: 120
         },
         {
-            id: 2,
+            id: (0, crypto_1.randomUUID)(),
             nama: "Puncak Mas 2",
             lokasi: "Lampung",
             deskripsi: "Wisata alam Lampung",
@@ -31,6 +32,20 @@ let WisataService = class WisataService {
             pengunjung: 80
         }
     ];
+    findAll() {
+        return this.wisata;
+    }
+    findOne(id) {
+        return this.wisata.find((wisata) => wisata.id === id);
+    }
+    create(createWisataDto) {
+        const createdWisata = {
+            id: (0, crypto_1.randomUUID)(),
+            ...createWisataDto
+        };
+        this.wisata.push(createdWisata);
+        return createdWisata;
+    }
 };
 exports.WisataService = WisataService;
 exports.WisataService = WisataService = __decorate([

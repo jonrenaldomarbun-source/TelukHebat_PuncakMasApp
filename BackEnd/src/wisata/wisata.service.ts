@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { randomUUID } from 'crypto';
+import type { CreateWisataDto } from './dto/create-wisata.dto';
 
 @Injectable()
 export class WisataService {
     private wisata = [
         {
-            id: 1,
+            id: randomUUID(),
             nama: "Puncak Mas",
             lokasi: "Lampung",
             deskripsi: "Wisata pemandangan bukit",
@@ -14,7 +16,7 @@ export class WisataService {
             pengunjung: 120
         },
         {
-            id: 2,
+            id: randomUUID(),
             nama: "Puncak Mas 2",
             lokasi: "Lampung",
             deskripsi: "Wisata alam Lampung",
@@ -24,4 +26,22 @@ export class WisataService {
             pengunjung: 80
         }
     ];
+
+    findAll() {
+        return this.wisata;
+    }
+
+    findOne(id: string) {
+        return this.wisata.find((wisata) => wisata.id === id);
+    }
+
+    create(createWisataDto: CreateWisataDto) {
+        const createdWisata = {
+            id: randomUUID(),
+            ...createWisataDto
+        };
+
+        this.wisata.push(createdWisata);
+        return createdWisata;
+    }
 }

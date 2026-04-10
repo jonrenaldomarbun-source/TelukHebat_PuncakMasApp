@@ -16,53 +16,20 @@ exports.WisataController = void 0;
 const common_1 = require("@nestjs/common");
 const create_wisata_dto_1 = require("./dto/create-wisata.dto");
 const update_wisata_dto_1 = require("./dto/update-wisata-dto");
+const wisata_service_1 = require("./wisata.service");
 let WisataController = class WisataController {
-    findAll(nama) {
-        return [
-            {
-                id: 1,
-                nama: "Puncak Mas",
-                lokasi: "Lampung",
-                deskripsi: "Wisata Bagus",
-                fasilitas: ["Spot Foto", "Cafe"],
-                hargaTiket: 20000,
-                jamBuka: "08:00",
-                pengunjung: 120
-            },
-            {
-                id: 2,
-                nama: "Puncak Mas 2",
-                lokasi: "Lampung",
-                deskripsi: "Pemandangan Kota",
-                fasilitas: ["Mushola", "Parkir"],
-                hargaTiket: 15000,
-                jamBuka: "09:00",
-                pengunjung: 80
-            }
-        ];
+    wisataService;
+    constructor(wisataService) {
+        this.wisataService = wisataService;
+    }
+    findAll() {
+        return this.wisataService.findAll();
     }
     findOne(id) {
-        return {
-            id,
-            nama: "Puncak Mas",
-            lokasi: "Lampung",
-            deskripsi: "Wisata Bagus",
-            fasilitas: ["Spot Foto", "Cafe"],
-            hargaTiket: 20000,
-            jamBuka: "08:00",
-            pengunjung: 120
-        };
+        return this.wisataService.findOne(id);
     }
     create(createWisataDto) {
-        return {
-            nama: createWisataDto.nama,
-            lokasi: createWisataDto.lokasi,
-            deskripsi: createWisataDto.deskripsi,
-            fasilitas: createWisataDto.fasilitas,
-            hargaTiket: createWisataDto.hargaTiket,
-            jamBuka: createWisataDto.jamBuka,
-            pengunjung: createWisataDto.pengunjung
-        };
+        return this.wisataService.create(createWisataDto);
     }
     update(id, updateWisataDto) {
         return {
@@ -75,9 +42,8 @@ let WisataController = class WisataController {
 exports.WisataController = WisataController;
 __decorate([
     (0, common_1.Get)(),
-    __param(0, (0, common_1.Query)('nama')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], WisataController.prototype, "findAll", null);
 __decorate([
@@ -111,6 +77,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], WisataController.prototype, "remove", null);
 exports.WisataController = WisataController = __decorate([
-    (0, common_1.Controller)('wisata')
+    (0, common_1.Controller)('wisata'),
+    __metadata("design:paramtypes", [wisata_service_1.WisataService])
 ], WisataController);
 //# sourceMappingURL=wisata.controller.js.map
