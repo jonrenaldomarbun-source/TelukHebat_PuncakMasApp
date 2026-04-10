@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import type { CreateWisataDto } from './dto/create-wisata.dto';
+import type { UpdateWisataDto } from './dto/update-wisata-dto';
+import { match } from 'assert';
 
 @Injectable()
 export class WisataService {
@@ -44,4 +46,32 @@ export class WisataService {
         this.wisata.push(createdWisata);
         return createdWisata;
     }
+
+    update(id: string, updateWisataDto: UpdateWisataDto) {
+    const index = this.wisata.findIndex((item) => item.id === id);
+
+    if (index === -1) {
+        return {}; // Atau sebaiknya throw NotFoundException
+    }
+
+    // Gabungkan data lama dengan data baru
+    // Data yang tidak ada di updateWisataDto tidak akan berubah
+    this.wisata[index] = {
+        ...this.wisata[index],
+        ...updateWisataDto
+    };
+
+    return this.wisata[index];
+}
+
+    remove(id: string): void{
+        const matchiingWisataIndex = this.wisata.findIndex(
+            (wisata) => wisata.id === id
+        );
+
+        if (matchiingWisataIndex > -1) {
+            this.wisata.splice(matchiingWisataIndex, 1);
+        }
+    }
+
 }

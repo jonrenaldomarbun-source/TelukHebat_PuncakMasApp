@@ -27,13 +27,12 @@ export class WisataController {
         @Param('id') id: string,
         @Body() updateWisataDto: UpdateWisataDto
     ) {
-        return {
-            id,
-            ...updateWisataDto
-        };
+        return this.wisataService.update(id, updateWisataDto);
     }
 
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
-    remove(@Param('id') id: string) { }
+    remove(@Param('id') id: string) {
+        this.wisataService.remove(id);
+     }
 }
