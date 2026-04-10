@@ -37,7 +37,7 @@ export default function RootLayout({
     <div className="flex gap-4">
       <Link href="/">Home</Link>
       <Link href="/dashboard">Dashboard</Link>
-      <Link href="/wisata">Wisata</Link>
+      <Link href="/detail_wisata">Wisata</Link>
       <Link href="/transaksi">Transaksi</Link>
       <Link href="/pengunjung">Pengunjung</Link>
     </div>

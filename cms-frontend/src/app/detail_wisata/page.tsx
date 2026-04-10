@@ -20,7 +20,7 @@ export default function Wisata() {
 
   // kalau mau ambil dari localStorage
   useEffect(() => {
-    const stored = localStorage.getItem("wisata");
+    const stored = localStorage.getItem("detail_wisata");
     if (stored) {
       setData(JSON.parse(stored));
     }
