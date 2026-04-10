@@ -23,7 +23,7 @@ export default function Home() {
           </div>
         </Link>
 
-        <Link href="/deatil_wisata">
+        <Link href="/detail_wisata">
           <div className="bg-white p-6 rounded shadow hover:shadow-lg cursor-pointer text-center">
             🏞️ Data Wisata
           </div>
