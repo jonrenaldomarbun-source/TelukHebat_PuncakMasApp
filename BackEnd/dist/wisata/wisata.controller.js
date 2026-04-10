@@ -23,12 +23,20 @@ let WisataController = class WisataController {
                 id: 1,
                 nama: "Puncak Mas",
                 lokasi: "Lampung",
+                deskripsi: "Wisata Bagus",
+                fasilitas: ["Spot Foto", "Cafe"],
+                hargaTiket: 20000,
+                jamBuka: "08:00",
                 pengunjung: 120
             },
             {
                 id: 2,
                 nama: "Puncak Mas 2",
                 lokasi: "Lampung",
+                deskripsi: "Pemandangan Kota",
+                fasilitas: ["Mushola", "Parkir"],
+                hargaTiket: 15000,
+                jamBuka: "09:00",
                 pengunjung: 80
             }
         ];
@@ -38,6 +46,10 @@ let WisataController = class WisataController {
             id,
             nama: "Puncak Mas",
             lokasi: "Lampung",
+            deskripsi: "Wisata Bagus",
+            fasilitas: ["Spot Foto", "Cafe"],
+            hargaTiket: 20000,
+            jamBuka: "08:00",
             pengunjung: 120
         };
     }
@@ -58,6 +70,7 @@ let WisataController = class WisataController {
             ...updateWisataDto
         };
     }
+    remove(id) { }
 };
 exports.WisataController = WisataController;
 __decorate([
@@ -89,6 +102,14 @@ __decorate([
     __metadata("design:paramtypes", [String, update_wisata_dto_1.UpdateWisataDto]),
     __metadata("design:returntype", void 0)
 ], WisataController.prototype, "update", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.NO_CONTENT),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], WisataController.prototype, "remove", null);
 exports.WisataController = WisataController = __decorate([
     (0, common_1.Controller)('wisata')
 ], WisataController);

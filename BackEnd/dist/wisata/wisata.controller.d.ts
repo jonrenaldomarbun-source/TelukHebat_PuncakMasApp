@@ -5,12 +5,20 @@ export declare class WisataController {
         id: number;
         nama: string;
         lokasi: string;
+        deskripsi: string;
+        fasilitas: string[];
+        hargaTiket: number;
+        jamBuka: string;
         pengunjung: number;
     }[];
     findOne(id: string): {
         id: string;
         nama: string;
         lokasi: string;
+        deskripsi: string;
+        fasilitas: string[];
+        hargaTiket: number;
+        jamBuka: string;
         pengunjung: number;
     };
     create(createWisataDto: CreateWisataDto): {
@@ -32,4 +40,5 @@ export declare class WisataController {
         pengunjung: number;
         id: string;
     };
+    remove(id: string): void;
 }

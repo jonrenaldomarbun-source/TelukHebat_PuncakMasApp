@@ -9,12 +9,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.WisataModule = void 0;
 const common_1 = require("@nestjs/common");
 const wisata_controller_1 = require("./wisata.controller");
+const wisata_service_1 = require("./wisata.service");
 let WisataModule = class WisataModule {
 };
 exports.WisataModule = WisataModule;
 exports.WisataModule = WisataModule = __decorate([
     (0, common_1.Module)({
-        controllers: [wisata_controller_1.WisataController]
+        controllers: [wisata_controller_1.WisataController],
+        providers: [wisata_service_1.WisataService]
     })
 ], WisataModule);
 //# sourceMappingURL=wisata.module.js.map
