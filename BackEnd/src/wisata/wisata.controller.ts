@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body, Patch, Delete, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Patch, Delete, HttpCode, HttpStatus, NotFoundException, ParseIntPipe } from '@nestjs/common';
 import { CreateWisataDto } from './dto/create-wisata.dto';
 import { UpdateWisataDto } from './dto/update-wisata-dto';
 import { WisataService } from './wisata.service';
@@ -13,7 +13,7 @@ export class WisataController {
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string) {
+    findOne(@Param('id', ParseIntPipe) id: number) {
         return this.wisataService.findOne(id);
     }
 
@@ -24,7 +24,7 @@ export class WisataController {
 
     @Patch(':id')
     update(
-        @Param('id') id: string,
+        @Param('id', ParseIntPipe) id: number,
         @Body() updateWisataDto: UpdateWisataDto
     ) {
         return this.wisataService.update(id, updateWisataDto);
@@ -32,7 +32,7 @@ export class WisataController {
 
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
-    remove(@Param('id') id: string) {
+    remove(@Param('id', ParseIntPipe) id: number) {
         this.wisataService.remove(id);
      }
 }

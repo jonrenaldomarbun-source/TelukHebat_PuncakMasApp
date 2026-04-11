@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import type { CreateWisataDto } from './dto/create-wisata.dto';
 import type { UpdateWisataDto } from './dto/update-wisata-dto';
@@ -8,7 +8,7 @@ import { match } from 'assert';
 export class WisataService {
     private wisata = [
         {
-            id: randomUUID(),
+            id: 1,
             nama: "Puncak Mas",
             lokasi: "Lampung",
             deskripsi: "Wisata pemandangan bukit",
@@ -18,7 +18,7 @@ export class WisataService {
             pengunjung: 120
         },
         {
-            id: randomUUID(),
+            id: 2,
             nama: "Puncak Mas 2",
             lokasi: "Lampung",
             deskripsi: "Wisata alam Lampung",
@@ -29,17 +29,25 @@ export class WisataService {
         }
     ];
 
+      private idCounter = 3;
+
     findAll() {
         return this.wisata;
     }
 
-    findOne(id: string) {
-        return this.wisata.find((wisata) => wisata.id === id);
+    findOne(id: number) {
+        const matchingWisata = this.wisata.find((wisata) => wisata.id === id);
+
+        if (!matchingWisata) {
+            throw new NotFoundException (`Wisata dengan ID ${id} tidak ditemukan.`)
+        }
+
+        return matchingWisata;
     }
 
     create(createWisataDto: CreateWisataDto) {
         const createdWisata = {
-            id: randomUUID(),
+            id: this.idCounter++,
             ...createWisataDto
         };
 
@@ -47,11 +55,11 @@ export class WisataService {
         return createdWisata;
     }
 
-    update(id: string, updateWisataDto: UpdateWisataDto) {
+    update(id: number, updateWisataDto: UpdateWisataDto) {
     const index = this.wisata.findIndex((item) => item.id === id);
 
     if (index === -1) {
-        return {}; // Atau sebaiknya throw NotFoundException
+        throw new NotFoundException(`Wisata dengan ID ${id} tidak ditemukan`); // Atau sebaiknya throw NotFoundException
     }
 
     // Gabungkan data lama dengan data baru
@@ -64,14 +72,15 @@ export class WisataService {
     return this.wisata[index];
 }
 
-    remove(id: string): void{
-        const matchiingWisataIndex = this.wisata.findIndex(
+    remove(id: number): void{
+        const matchingWisataIndex = this.wisata.findIndex(
             (wisata) => wisata.id === id
         );
 
-        if (matchiingWisataIndex > -1) {
-            this.wisata.splice(matchiingWisataIndex, 1);
+        if (matchingWisataIndex === -1) {
+            throw new NotFoundException(`Wisata dengan ID ${id} tidak ditemukan.`);
         }
-    }
 
+            this.wisata.splice(matchingWisataIndex, 1);
+        }
 }
