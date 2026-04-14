@@ -2,6 +2,7 @@
 
 curl -X POST -i http://127.0.0.1:3000/wisata \
   -H "Content-Type: application/json" \
+  -H "authorization: PuncakMasAdmin123" \
   -d '{
     "nama": "Puncak Mas 3",
     "lokasi": "Lampung",
