@@ -1,34 +1,22 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { randomUUID } from 'crypto';
 import type { CreateWisataDto } from './dto/create-wisata.dto';
 import type { UpdateWisataDto } from './dto/update-wisata-dto';
 
 @Injectable()
 export class WisataService {
+    // Data dummy disesuaikan dengan form CMS Transaksi
     private wisata = [
         {
             id: 1,
-            nama: "Puncak Mas",
-            lokasi: "Lampung",
-            deskripsi: "Wisata pemandangan bukit",
-            fasilitas: ["Spot Foto", "Cafe"],
-            hargaTiket: 20000,
-            jamBuka: "08:00",
-            pengunjung: 120
-        },
-        {
-            id: 2,
-            nama: "Puncak Mas 2",
-            lokasi: "Lampung",
-            deskripsi: "Wisata alam Lampung",
-            fasilitas: ["Mushola", "Parkir"],
-            hargaTiket: 15000,
-            jamBuka: "09:00",
-            pengunjung: 80
+            tanggal: "2026-04-17",
+            nama: "bomay",
+            jumlah: 5,
+            hargaTiket: 50000,
+            total: 250000 // Hasil dari 5 * 50000
         }
     ];
 
-      private idCounter = 3;
+    private idCounter = 2; // Mulai dari 2 karena ID 1 sudah terpakai
 
     findAll() {
         return this.wisata;
@@ -38,16 +26,20 @@ export class WisataService {
         const matchingWisata = this.wisata.find((wisata) => wisata.id === id);
 
         if (!matchingWisata) {
-            throw new NotFoundException (`Wisata dengan ID ${id} tidak ditemukan.`)
+            throw new NotFoundException(`Data transaksi dengan ID ${id} tidak ditemukan.`);
         }
 
         return matchingWisata;
     }
 
     create(createWisataDto: CreateWisataDto) {
+        // Hitung total secara otomatis di Backend
+        const totalHitung = createWisataDto.jumlah * createWisataDto.hargaTiket;
+
         const createdWisata = {
             id: this.idCounter++,
-            ...createWisataDto
+            ...createWisataDto,
+            total: totalHitung // Simpan hasil hitungan ke objek
         };
 
         this.wisata.push(createdWisata);
@@ -55,31 +47,35 @@ export class WisataService {
     }
 
     update(id: number, updateWisataDto: UpdateWisataDto) {
-    const index = this.wisata.findIndex((item) => item.id === id);
+        const index = this.wisata.findIndex((item) => item.id === id);
 
-    if (index === -1) {
-        throw new NotFoundException(`Wisata dengan ID ${id} tidak ditemukan`); // Atau sebaiknya throw NotFoundException
+        if (index === -1) {
+            throw new NotFoundException(`Data transaksi dengan ID ${id} tidak ditemukan`);
+        }
+
+        // Gabungkan data lama dengan data baru
+        const updatedData = {
+            ...this.wisata[index],
+            ...updateWisataDto
+        };
+
+        // Jika jumlah atau hargaTiket di-update, pastikan totalnya dihitung ulang!
+        updatedData.total = updatedData.jumlah * updatedData.hargaTiket;
+
+        this.wisata[index] = updatedData;
+
+        return this.wisata[index];
     }
 
-    // Gabungkan data lama dengan data baru
-    // Data yang tidak ada di updateWisataDto tidak akan berubah
-    this.wisata[index] = {
-        ...this.wisata[index],
-        ...updateWisataDto
-    };
-
-    return this.wisata[index];
-}
-
-    remove(id: number): void{
+    remove(id: number): void {
         const matchingWisataIndex = this.wisata.findIndex(
             (wisata) => wisata.id === id
         );
 
         if (matchingWisataIndex === -1) {
-            throw new NotFoundException(`Wisata dengan ID ${id} tidak ditemukan.`);
+            throw new NotFoundException(`Data transaksi dengan ID ${id} tidak ditemukan.`);
         }
 
-            this.wisata.splice(matchingWisataIndex, 1);
-        }
+        this.wisata.splice(matchingWisataIndex, 1);
+    }
 }

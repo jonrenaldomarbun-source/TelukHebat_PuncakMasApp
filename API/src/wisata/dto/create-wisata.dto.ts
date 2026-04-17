@@ -1,31 +1,22 @@
-import { Length, IsString, IsNumber, IsArray, IsNotEmpty, Min, IsOptional } from 'class-validator';
+import { IsString, IsNumber, IsNotEmpty, Min, IsDateString, Length } from 'class-validator';
 
 export class CreateWisataDto {
-    @IsString()
-    @IsNotEmpty({ message: 'Nama tempat wisata harus diisi' })
-    @Length(3, 100)
-    nama: string;
-
-    @IsString()
+    @IsDateString({}, { message: 'Format tanggal tidak valid' })
     @IsNotEmpty()
-    lokasi: string;
+    tanggal: string;
 
     @IsString()
-    @IsOptional() // Deskripsi boleh kosong kalau belum ada
-    deskripsi: string;
+    @IsNotEmpty({ message: 'Nama Pengunjung harus diisi' })
+    @Length(3, 100)
+    nama: string; // Di UI ini adalah "Nama Pengunjung"
 
-    @IsArray()
-    @IsString({ each: true }) // Tiap item di dalam array harus string
-    fasilitas: string[];
+    @IsNumber()
+    @Min(1)
+    @IsNotEmpty()
+    jumlah: number; // Tambahkan ini! Karena di UI ada kolom "Jumlah"
 
     @IsNumber()
     @Min(0)
-    hargaTiket: number;
-
-    @IsString()
-    jamBuka: string;
-
-    @IsNumber()
-    @IsOptional()
-    pengunjung: number;
+    @IsNotEmpty()
+    hargaTiket: number; // Di UI ini adalah "Harga"
 }

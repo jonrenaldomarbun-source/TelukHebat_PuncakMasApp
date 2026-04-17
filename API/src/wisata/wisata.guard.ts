@@ -1,5 +1,4 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
-import { Observable } from 'rxjs';
 
 @Injectable()
 export class WisataGuard implements CanActivate {
@@ -12,12 +11,14 @@ export class WisataGuard implements CanActivate {
 
   // Fungsi pengecekan kunci akses
   authenticate(request: any): boolean {
+    // Di Express/NestJS, keys dari headers otomatis menjadi huruf kecil (lowercase)
     const authHeader = request.headers['authorization'];
 
-    // Kita tentukan kunci rahasia untuk CMS kamu
+    // Kunci rahasia CMS
     const KUNCI_RAHASIA = 'PuncakMasAdmin123';
 
-    if (authHeader === KUNCI_RAHASIA) {
+    // Mendukung format "PuncakMasAdmin123" langsung atau "Bearer PuncakMasAdmin123"
+    if (authHeader === KUNCI_RAHASIA || authHeader === `Bearer ${KUNCI_RAHASIA}`) {
       return true; // Pintu dibuka, boleh CRUD
     }
 
