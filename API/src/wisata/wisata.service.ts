@@ -33,13 +33,17 @@ export class WisataService {
     }
 
     create(createWisataDto: CreateWisataDto) {
-        // Hitung total secara otomatis di Backend
-        const totalHitung = createWisataDto.jumlah * createWisataDto.hargaTiket;
+        // Hitung total secara otomatis
+        const totalHitung = createWisataDto.Jumlah * createWisataDto.Harga;
 
         const createdWisata = {
             id: this.idCounter++,
-            ...createWisataDto,
-            total: totalHitung // Simpan hasil hitungan ke objek
+            // Mapping secara manual agar sinkron dengan property di array 'wisata'
+            tanggal: createWisataDto.Tanggal,
+            nama: createWisataDto.Nama,
+            jumlah: createWisataDto.Jumlah,
+            hargaTiket: createWisataDto.Harga,
+            total: totalHitung
         };
 
         this.wisata.push(createdWisata);
@@ -60,10 +64,10 @@ export class WisataService {
         // Jika field di DTO kosong, kita tetap pakai data yang lama (dataLama).
         const dataBaru = {
             id: dataLama.id, // ID tetap pakai yang lama
-            tanggal: updateWisataDto.tanggal ?? dataLama.tanggal,
-            nama: updateWisataDto.nama ?? dataLama.nama,
-            jumlah: updateWisataDto.jumlah ?? dataLama.jumlah,
-            hargaTiket: updateWisataDto.hargaTiket ?? dataLama.hargaTiket,
+            tanggal: updateWisataDto.Tanggal ?? dataLama.tanggal,
+            nama: updateWisataDto.Nama ?? dataLama.nama,
+            jumlah: updateWisataDto.Jumlah ?? dataLama.jumlah,
+            hargaTiket: updateWisataDto.Harga ?? dataLama.hargaTiket,
             total: 0 // Akan dihitung di bawah
         };
 

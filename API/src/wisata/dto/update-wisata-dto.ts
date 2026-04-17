@@ -3,20 +3,20 @@ import { IsString, IsNumber, IsOptional, Min, IsDateString, Length } from 'class
 export class UpdateWisataDto {
     @IsDateString()
     @IsOptional()
-    tanggal?: string;
+    Tanggal?: string;
 
     @IsString()
     @IsOptional()
     @Length(3, 100)
-    nama?: string;
+    Nama?: string;
 
     @IsNumber()
     @Min(1)
     @IsOptional()
-    jumlah?: number;
+    Jumlah?: number;
 
     @IsNumber()
     @Min(0)
     @IsOptional()
-    hargaTiket?: number;
+    Harga?: number;
 }

@@ -15,7 +15,7 @@ export class WisataGuard implements CanActivate {
     const authHeader = request.headers['authorization'];
 
     // Kunci rahasia CMS
-    const KUNCI_RAHASIA = 'PuncakMasAdmin123';
+    const KUNCI_RAHASIA = 'Admin123';
 
     // Mendukung format "PuncakMasAdmin123" langsung atau "Bearer PuncakMasAdmin123"
     if (authHeader === KUNCI_RAHASIA || authHeader === `Bearer ${KUNCI_RAHASIA}`) {
