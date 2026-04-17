@@ -5,12 +5,17 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
-  // Tambahkan whitelist: true
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true, 
-    forbidNonWhitelisted: true // (Opsional) Langsung error 400 jika ada field asing
+    forbidNonWhitelisted: true,
+    // TAMBAHKAN INI:
+    transform: true, 
+    transformOptions: {
+      enableImplicitConversion: true, // Otomatis mengubah string '5' menjadi number 5
+    },
   }));
   
   await app.listen(process.env.PORT ?? 3000);
+  console.log('Server runs on: http://localhost:3000');
 }
 bootstrap();

@@ -50,21 +50,30 @@ export class WisataService {
         const index = this.wisata.findIndex((item) => item.id === id);
 
         if (index === -1) {
-            throw new NotFoundException(`Data transaksi dengan ID ${id} tidak ditemukan`);
+            throw new NotFoundException(`Data dengan ID ${id} tidak ditemukan.`);
         }
 
-        // Gabungkan data lama dengan data baru
-        const updatedData = {
-            ...this.wisata[index],
-            ...updateWisataDto
+        // 1. Ambil data lama yang lengkap (nama, tanggal, jumlah, dll)
+        const dataLama = this.wisata[index];
+
+        // 2. Gabungkan secara manual dan sangat spesifik.
+        // Jika field di DTO kosong, kita tetap pakai data yang lama (dataLama).
+        const dataBaru = {
+            id: dataLama.id, // ID tetap pakai yang lama
+            tanggal: updateWisataDto.tanggal ?? dataLama.tanggal,
+            nama: updateWisataDto.nama ?? dataLama.nama,
+            jumlah: updateWisataDto.jumlah ?? dataLama.jumlah,
+            hargaTiket: updateWisataDto.hargaTiket ?? dataLama.hargaTiket,
+            total: 0 // Akan dihitung di bawah
         };
 
-        // Jika jumlah atau hargaTiket di-update, pastikan totalnya dihitung ulang!
-        updatedData.total = updatedData.jumlah * updatedData.hargaTiket;
+        // 3. Hitung ulang totalnya berdasarkan data yang sudah pasti ada
+        dataBaru.total = dataBaru.jumlah * dataBaru.hargaTiket;
 
-        this.wisata[index] = updatedData;
+        // 4. Masukkan kembali ke array memory
+        this.wisata[index] = dataBaru;
 
-        return this.wisata[index];
+        return dataBaru;
     }
 
     remove(id: number): void {

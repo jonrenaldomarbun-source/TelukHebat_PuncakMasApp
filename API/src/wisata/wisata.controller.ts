@@ -26,7 +26,7 @@ export class WisataController {
 
     @Patch(':id')
     @UseGuards(WisataGuard)
-    update(
+    update( 
         @Param('id', ParseIntPipe) id: number,
         @Body() updateWisataDto: UpdateWisataDto
     ) {
