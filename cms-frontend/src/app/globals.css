@@ -1,26 +1,73 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Kita kunci ke warna terang (Light Mode) dulu biar desain kita konsisten */
+  --background: #f8fafc;
+  --foreground: #0f172a;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* Hapus bagian @media dark mode kalau kamu belum siap bikin desain versi gelap */
+/* Biar dosen nggak kaget pas buka laptopnya mode dark, tapi tampilannya malah berantakan */
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* Pakai font variable dari Geist yang sudah kita pasang di Layout */
+  font-family: var(--font-sans), ui-sans-serif, system-ui;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tambahan dikit biar scrollbar-nya nggak kaku */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}@import "tailwindcss";
+
+:root {
+  /* Kita kunci ke warna terang (Light Mode) dulu biar desain kita konsisten */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+}
+
+/* Hapus bagian @media dark mode kalau kamu belum siap bikin desain versi gelap */
+/* Biar dosen nggak kaget pas buka laptopnya mode dark, tapi tampilannya malah berantakan */
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  /* Pakai font variable dari Geist yang sudah kita pasang di Layout */
+  font-family: var(--font-sans), ui-sans-serif, system-ui;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Tambahan dikit biar scrollbar-nya nggak kaku */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }

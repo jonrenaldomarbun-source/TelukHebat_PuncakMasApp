@@ -1,48 +1,88 @@
+"use client";
 import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-blue-100 to-blue-300">
+    <div className="min-h-[80vh] flex flex-col items-center justify-center bg-[#f8fafc] px-4">
 
-      {/* TITLE */}
-      <h1 className="text-4xl font-bold mb-4">
-        PuncakMas CMS
-      </h1>
+      {/* DECORATION BUBBLE */}
+      <div className="absolute top-20 left-10 w-32 h-32 bg-blue-100 rounded-full blur-3xl opacity-50"></div>
+      <div className="absolute bottom-20 right-10 w-40 h-40 bg-purple-100 rounded-full blur-3xl opacity-50"></div>
 
-      <p className="text-gray-600 mb-8 text-center max-w-md">
-        Sistem Informasi Wisata Puncak Mas yang membantu pengelolaan
-        data wisata, transaksi tiket, dan pengunjung secara mudah dan cepat.
-      </p>
+      <div className="relative z-10 text-center mb-12">
+        <div className="inline-block bg-blue-50 text-blue-600 px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.2em] mb-4 border border-blue-100">
+          Administrator Panel
+        </div>
+        <h1 className="text-5xl md:text-7xl font-black text-slate-900 tracking-tighter mb-6">
+          Puncak Mas <span className="text-blue-600">CMS.</span>
+        </h1>
+        <p className="text-slate-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-medium">
+          Solusi terintegrasi untuk pengelolaan destinasi wisata.
+          Pantau transaksi, data pengunjung, dan kelola konten dalam satu dasbor yang cerdas.
+        </p>
+      </div>
 
-      {/* MENU */}
-      <div className="grid grid-cols-2 gap-4">
+      {/* MENU GRID */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-6xl">
 
-        <Link href="/dashboard">
-          <div className="bg-white p-6 rounded shadow hover:shadow-lg cursor-pointer text-center">
-            📊 Dashboard
-          </div>
-        </Link>
+        <MenuCard
+          href="/dashboard"
+          emoji="📊"
+          title="Dashboard"
+          desc="Ringkasan data & statistik real-time."
+          color="hover:border-blue-500"
+        />
 
-        <Link href="/detail_wisata">
-          <div className="bg-white p-6 rounded shadow hover:shadow-lg cursor-pointer text-center">
-            🏞️ Data Wisata
-          </div>
-        </Link>
+        <MenuCard
+          href="/detail_wisata"
+          emoji="🏞️"
+          title="Data Wisata"
+          desc="Kelola informasi & konten wisata."
+          color="hover:border-emerald-500"
+        />
 
-        <Link href="/transaksi">
-          <div className="bg-white p-6 rounded shadow hover:shadow-lg cursor-pointer text-center">
-            💰 Transaksi
-          </div>
-        </Link>
+        <MenuCard
+          href="/transaksi"
+          emoji="💰"
+          title="Transaksi"
+          desc="Catat & pantau penjualan tiket."
+          color="hover:border-amber-500"
+        />
 
-        <Link href="/pengunjung">
-          <div className="bg-white p-6 rounded shadow hover:shadow-lg cursor-pointer text-center">
-            👥 Pengunjung
-          </div>
-        </Link>
+        <MenuCard
+          href="/pengunjung"
+          emoji="👥"
+          title="Pengunjung"
+          desc="Analisa data kunjungan harian."
+          color="hover:border-purple-500"
+        />
 
       </div>
 
+      {/* FOOTER HINT */}
+      <div className="mt-16 flex items-center gap-2 text-slate-400 font-bold text-xs uppercase tracking-widest">
+        <span className="w-8 h-[1px] bg-slate-200"></span>
+        Powered by NestJS & Next.js
+        <span className="w-8 h-[1px] bg-slate-200"></span>
+      </div>
     </div>
+  );
+}
+
+// Komponen Card biar kodingan rapi
+function MenuCard({ href, emoji, title, desc, color }: { href: string, emoji: string, title: string, desc: string, color: string }) {
+  return (
+    <Link href={href} className="group">
+      <div className={`h-full bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:shadow-slate-200/50 ${color} flex flex-col items-start text-left`}>
+        <div className="text-4xl mb-6 group-hover:scale-125 transition-transform duration-300">{emoji}</div>
+        <h3 className="text-xl font-black text-slate-800 mb-2">{title}</h3>
+        <p className="text-slate-500 text-sm leading-relaxed font-medium">
+          {desc}
+        </p>
+        <div className="mt-6 flex items-center text-blue-600 font-black text-[10px] uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">
+          Buka Menu <span className="ml-2">→</span>
+        </div>
+      </div>
+    </Link>
   );
 }
