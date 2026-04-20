@@ -45,7 +45,7 @@ export default function Dashboard() {
       <div className="max-w-6xl mx-auto">
         <header className="mb-10">
           <h1 className="text-4xl font-black text-slate-900 tracking-tight">
-            🚀 Dashboard Utama
+             Dashboard Utama
           </h1>
           <p className="text-slate-500 font-medium">Ringkasan aktivitas Puncak Mas hari ini.</p>
         </header>
@@ -85,12 +85,7 @@ export default function Dashboard() {
 
         {/* BOTTOM SECTION */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <div className="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
-            <h3 className="text-xl font-black mb-4">Grafik Mingguan</h3>
-            <div className="h-48 w-full bg-slate-50 rounded-3xl flex items-center justify-center border-2 border-dashed border-slate-200">
-              <p className="text-slate-400 text-sm font-bold italic">Visualisasi data sedang diproses...</p>
-            </div>
-          </div>
+          
 
           <div className="bg-slate-900 p-8 rounded-[2.5rem] shadow-2xl text-white relative overflow-hidden">
             <div className="relative z-10">
