@@ -1,11 +1,7 @@
-// lib/screens/home_screen.dart
-// Layar utama: menampilkan daftar semua data wisata/tiket dari API
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/wisata.dart';
 import '../services/wisata_service.dart';
-import 'detail_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,576 +11,528 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final WisataService _service = WisataService();
-  late Future<List<Wisata>> _futureWisata;
-  final TextEditingController _namaController = TextEditingController();
-  final TextEditingController _jumlahController = TextEditingController(
-    text: '1',
-  );
-  final TextEditingController _hargaController = TextEditingController(
-    text: '10000',
-  );
-  bool _submitting = false;
+  int _currentIndex = 0;
 
   @override
-  void initState() {
-    super.initState();
-    _futureWisata = _service.fetchAllWisata();
+  Widget build(BuildContext context) {
+    final pages = [
+      HomeTab(onOpenTiket: () => setState(() => _currentIndex = 1)),
+      TiketTab(onSuccessBuy: () => setState(() => _currentIndex = 2)),
+      const TransaksiTab(),
+      AkunTab(
+        onLogout: () {
+          setState(() => _currentIndex = 0);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Logout berhasil.')),
+          );
+        },
+      ),
+    ];
+
+    return Scaffold(
+      body: IndexedStack(index: _currentIndex, children: pages),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentIndex,
+        onDestinationSelected: (index) => setState(() => _currentIndex = index),
+        destinations: const [
+          NavigationDestination(icon: Icon(Icons.home_rounded), label: 'Home'),
+          NavigationDestination(
+            icon: Icon(Icons.confirmation_number_rounded),
+            label: 'Tiket',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.receipt_long_rounded),
+            label: 'Transaksi',
+          ),
+          NavigationDestination(icon: Icon(Icons.people_rounded), label: 'Akun'),
+        ],
+      ),
+    );
   }
+}
+
+class HomeTab extends StatelessWidget {
+  const HomeTab({super.key, required this.onOpenTiket});
+
+  final VoidCallback onOpenTiket;
+
+  @override
+  Widget build(BuildContext context) {
+    const fasilitas = [
+      'Spot Foto Instagramable',
+      'Area Parkir Luas',
+      'Kafe & Restoran',
+      'Toilet Bersih',
+      'Gazebo Istirahat',
+      'Mushola',
+    ];
+
+    const mapsLink = '';
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
+      appBar: AppBar(
+        title: const Text('Home'),
+      ),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF1E6B3C), Color(0xFF2D9B57)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Puncak Mas',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 30,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                SizedBox(height: 6),
+                Text(
+                  'Bandar Lampung, Lampung',
+                  style: TextStyle(color: Colors.white70, fontSize: 14),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          _CardSection(
+            title: 'Tentang Wisata',
+            child: const Text(
+              'Puncak Mas merupakan destinasi wisata ikonik di atas perbukitan Kota Bandar Lampung. Menawarkan kombinasi udara sejuk dan panorama perkotaan dari ketinggian. Tempat ini menjadi favorit keluarga untuk menikmati sunset dan keindahan lampu kota di malam hari.',
+              style: TextStyle(height: 1.6, color: Color(0xFF334155)),
+            ),
+          ),
+          const SizedBox(height: 14),
+          _CardSection(
+            title: 'Fasilitas Utama',
+            child: Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: fasilitas
+                  .map(
+                    (item) => Chip(
+                      label: Text(item),
+                      backgroundColor: const Color(0xFFE8F5EE),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+          const SizedBox(height: 14),
+          _CardSection(
+            title: 'Maps Lokasi',
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Link maps akan dipakai dari data yang kamu berikan.',
+                  style: TextStyle(color: Colors.black54),
+                ),
+                const SizedBox(height: 10),
+                ElevatedButton.icon(
+                  onPressed: mapsLink.isEmpty
+                      ? null
+                      : () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Integrasi pembuka maps siap dipasang.'),
+                            ),
+                          );
+                        },
+                  icon: const Icon(Icons.map_rounded),
+                  label: const Text('Buka Maps'),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+          FilledButton.icon(
+            onPressed: onOpenTiket,
+            icon: const Icon(Icons.confirmation_number_rounded),
+            label: const Text('Lanjut ke Tiket'),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TiketTab extends StatefulWidget {
+  const TiketTab({super.key, required this.onSuccessBuy});
+
+  final VoidCallback onSuccessBuy;
+
+  @override
+  State<TiketTab> createState() => _TiketTabState();
+}
+
+class _TiketTabState extends State<TiketTab> {
+  final WisataService _service = WisataService();
+  final TextEditingController _namaController = TextEditingController();
+  final TextEditingController _jumlahController = TextEditingController(text: '1');
+  bool _loading = false;
+  int _harga = 20000;
 
   @override
   void dispose() {
     _namaController.dispose();
     _jumlahController.dispose();
-    _hargaController.dispose();
     super.dispose();
   }
 
-  /// Refresh data dari API
-  void _refresh() {
-    setState(() {
-      _futureWisata = _service.fetchAllWisata();
-    });
-  }
-
-  Future<void> _submitTransaksi() async {
+  Future<void> _beliSekarang() async {
     final nama = _namaController.text.trim();
     final jumlah = int.tryParse(_jumlahController.text.trim()) ?? 0;
-    final harga = int.tryParse(_hargaController.text.trim()) ?? 0;
-
-    if (nama.isEmpty) {
-      _showSnackBar('Nama pengunjung wajib diisi.');
-      return;
-    }
-    if (jumlah < 1) {
-      _showSnackBar('Jumlah minimal 1.');
-      return;
-    }
-    if (harga < 0) {
-      _showSnackBar('Harga tidak boleh negatif.');
+    if (nama.isEmpty || jumlah < 1) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Isi nama dan jumlah tiket dengan benar.')),
+      );
       return;
     }
 
-    setState(() => _submitting = true);
+    setState(() => _loading = true);
     try {
-      final tanggal = DateFormat('yyyy-MM-dd').format(DateTime.now());
       await _service.createTransaksi(
         nama: nama,
         jumlah: jumlah,
-        harga: harga,
-        tanggal: tanggal,
+        harga: _harga,
+        tanggal: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+      );
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Pembelian tiket berhasil.')),
       );
       _namaController.clear();
       _jumlahController.text = '1';
-      _hargaController.text = '10000';
-      _refresh();
-      _showSnackBar('Transaksi berhasil disimpan.');
+      widget.onSuccessBuy();
     } catch (e) {
-      _showSnackBar('Gagal simpan transaksi: $e');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal beli tiket: $e')),
+      );
     } finally {
       if (mounted) {
-        setState(() => _submitting = false);
+        setState(() => _loading = false);
       }
     }
   }
 
-  Future<void> _deleteTransaksi(int id) async {
-    try {
-      await _service.deleteTransaksi(id);
-      _refresh();
-      _showSnackBar('Transaksi berhasil dihapus.');
-    } catch (e) {
-      _showSnackBar('Gagal hapus transaksi: $e');
-    }
-  }
-
-  Future<void> _confirmDelete(int id) async {
-    final shouldDelete = await showDialog<bool>(
-      context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
-          title: const Text('Hapus transaksi?'),
-          content: const Text('Data ini akan dihapus permanen dari daftar.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(false),
-              child: const Text('Batal'),
+  @override
+  Widget build(BuildContext context) {
+    final totalPreview = (_harga * (int.tryParse(_jumlahController.text) ?? 1));
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
+      appBar: AppBar(title: const Text('Tiket')),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          _CardSection(
+            title: 'Informasi Tiket',
+            child: Column(
+              children: [
+                _priceRow('Senin - Jumat', 'Rp 20.000'),
+                const Divider(),
+                _priceRow('Sabtu - Minggu', 'Rp 25.000'),
+              ],
             ),
-            FilledButton(
-              onPressed: () => Navigator.of(dialogContext).pop(true),
-              child: const Text('Hapus'),
+          ),
+          const SizedBox(height: 14),
+          _CardSection(
+            title: 'Form Pembelian',
+            child: Column(
+              children: [
+                TextField(
+                  controller: _namaController,
+                  decoration: const InputDecoration(
+                    labelText: 'Nama Pengunjung',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: _jumlahController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Jumlah Tiket',
+                    border: OutlineInputBorder(),
+                  ),
+                  onChanged: (_) => setState(() {}),
+                ),
+                const SizedBox(height: 10),
+                DropdownButtonFormField<int>(
+                  value: _harga,
+                  items: const [
+                    DropdownMenuItem(value: 20000, child: Text('Weekday - Rp 20.000')),
+                    DropdownMenuItem(value: 25000, child: Text('Weekend - Rp 25.000')),
+                  ],
+                  onChanged: (value) => setState(() => _harga = value ?? 20000),
+                  decoration: const InputDecoration(
+                    labelText: 'Pilih Harga Tiket',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Estimasi total: ${NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ', decimalDigits: 0).format(totalPreview)}',
+                    style: const TextStyle(fontWeight: FontWeight.w700),
+                  ),
+                ),
+              ],
             ),
-          ],
-        );
-      },
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton.icon(
+            onPressed: _loading ? null : _beliSekarang,
+            icon: _loading
+                ? const SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                  )
+                : const Icon(Icons.shopping_cart_checkout_rounded),
+            label: Text(_loading ? 'Memproses...' : 'Beli Sekarang'),
+          ),
+        ],
+      ),
     );
-
-    if (shouldDelete == true) {
-      await _deleteTransaksi(id);
-    }
   }
 
-  void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
+  Widget _priceRow(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: const TextStyle(color: Colors.black54)),
+        Text(value, style: const TextStyle(fontWeight: FontWeight.w800)),
+      ],
     );
   }
+}
 
-  String _formatRupiah(int angka) {
-    final formatter = NumberFormat.currency(
-      locale: 'id_ID',
-      symbol: 'Rp ',
-      decimalDigits: 0,
-    );
-    return formatter.format(angka);
+class TransaksiTab extends StatefulWidget {
+  const TransaksiTab({super.key});
+
+  @override
+  State<TransaksiTab> createState() => _TransaksiTabState();
+}
+
+class _TransaksiTabState extends State<TransaksiTab> {
+  final WisataService _service = WisataService();
+  late Future<List<Wisata>> _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = _service.fetchAllWisata();
   }
 
-  String _formatTanggal(String tanggal) {
+  void _refresh() {
+    setState(() => _future = _service.fetchAllWisata());
+  }
+
+  Future<void> _delete(int id) async {
+    await _service.deleteTransaksi(id);
+    _refresh();
+  }
+
+  String _formatDate(String value) {
     try {
-      final dt = DateTime.parse(tanggal);
-      return DateFormat('dd MMM yyyy', 'id_ID').format(dt);
+      return DateFormat('dd MMM yyyy', 'id_ID').format(DateTime.parse(value));
     } catch (_) {
-      return tanggal;
+      return value;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF4F7F5),
+      backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        title: const Row(
-          children: [
-            Icon(Icons.landscape_rounded, size: 22),
-            SizedBox(width: 8),
-            Text(
-              'PuncakMas',
-              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
-            ),
-          ],
-        ),
+        title: const Text('Transaksi'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh_rounded),
-            tooltip: 'Refresh',
-            onPressed: _refresh,
-          ),
+          IconButton(onPressed: _refresh, icon: const Icon(Icons.refresh_rounded)),
         ],
       ),
       body: FutureBuilder<List<Wisata>>(
-        future: _futureWisata,
+        future: _future,
         builder: (context, snapshot) {
-          // === Loading State ===
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(color: Color(0xFF1E6B3C)),
-                  SizedBox(height: 16),
-                  Text('Memuat data wisata...'),
-                ],
-              ),
-            );
+            return const Center(child: CircularProgressIndicator());
           }
-
-          // === Error State ===
           if (snapshot.hasError) {
             return Center(
               child: Padding(
-                padding: const EdgeInsets.all(32.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                padding: const EdgeInsets.all(20),
+                child: Text(
+                  'Gagal memuat histori: ${snapshot.error}',
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            );
+          }
+          final data = snapshot.data ?? [];
+          if (data.isEmpty) {
+            return const Center(child: Text('Belum ada histori pembelian tiket.'));
+          }
+
+          return ListView.separated(
+            padding: const EdgeInsets.all(16),
+            itemCount: data.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 10),
+            itemBuilder: (context, index) {
+              final item = data[index];
+              return Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Row(
                   children: [
-                    const Icon(Icons.wifi_off_rounded,
-                        size: 64, color: Colors.grey),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Gagal Terhubung ke Server',
-                      style: TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
+                    CircleAvatar(
+                      backgroundColor: const Color(0xFFE8F5EE),
+                      child: Text('#${item.id}'),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Pastikan API NestJS sudah berjalan di port 3000.\n${snapshot.error}',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(color: Colors.grey, fontSize: 13),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            item.nama,
+                            style: const TextStyle(fontWeight: FontWeight.w800),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            '${_formatDate(item.tanggal)} • ${item.jumlah} tiket',
+                            style: const TextStyle(color: Colors.black54),
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 24),
-                    ElevatedButton.icon(
-                      onPressed: _refresh,
-                      icon: const Icon(Icons.refresh_rounded),
-                      label: const Text('Coba Lagi'),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          NumberFormat.currency(
+                            locale: 'id_ID',
+                            symbol: 'Rp ',
+                            decimalDigits: 0,
+                          ).format(item.total),
+                          style: const TextStyle(
+                            color: Color(0xFF1E6B3C),
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () => _delete(item.id),
+                          icon: const Icon(
+                            Icons.delete_outline_rounded,
+                            color: Colors.redAccent,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ),
-            );
-          }
-
-          // === Empty State ===
-          final data = snapshot.data ?? [];
-          if (data.isEmpty) {
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.inbox_rounded, size: 64, color: Colors.grey),
-                  SizedBox(height: 16),
-                  Text('Belum ada data wisata.',
-                      style: TextStyle(color: Colors.grey)),
-                ],
-              ),
-            );
-          }
-
-          // === Hitung ringkasan statistik ===
-          final totalPengunjung = data.fold<int>(
-            0, (sum, item) => sum + item.jumlah);
-          final totalPemasukan = data.fold<int>(
-            0, (sum, item) => sum + item.total);
-
-          // === Data Loaded State ===
-          return RefreshIndicator(
-            color: const Color(0xFF1E6B3C),
-            onRefresh: () async => _refresh(),
-            child: CustomScrollView(
-              slivers: [
-                // --- Banner Header ---
-                SliverToBoxAdapter(
-                  child: _buildHeaderBanner(
-                    data.length, totalPengunjung, totalPemasukan),
-                ),
-
-                SliverToBoxAdapter(
-                  child: _buildInputCard(),
-                ),
-
-                // --- Label daftar ---
-                const SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(16, 24, 16, 8),
-                    child: Text(
-                      'Daftar Tiket Masuk',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                        color: Color(0xFF1E3A2F),
-                      ),
-                    ),
-                  ),
-                ),
-
-                // --- List kartu wisata ---
-                SliverList(
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) {
-                      final item = data[index];
-                      return _buildWisataCard(context, item);
-                    },
-                    childCount: data.length,
-                  ),
-                ),
-                const SliverToBoxAdapter(child: SizedBox(height: 24)),
-              ],
-            ),
+              );
+            },
           );
         },
       ),
     );
   }
+}
 
-  Widget _buildHeaderBanner(
-      int totalTransaksi, int totalPengunjung, int totalPemasukan) {
-    return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFF1E6B3C), Color(0xFF2D9B57)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF1E6B3C).withOpacity(0.3),
-            blurRadius: 16,
-            offset: const Offset(0, 6),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+class AkunTab extends StatelessWidget {
+  const AkunTab({super.key, required this.onLogout});
+
+  final VoidCallback onLogout;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8FAFC),
+      appBar: AppBar(title: const Text('Akun')),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
         children: [
-          Row(
-            children: [
-              const Icon(Icons.confirmation_number_rounded,
-                  color: Colors.white70, size: 18),
-              const SizedBox(width: 8),
-              Text(
-                'Ringkasan Kunjungan',
-                style: TextStyle(
-                  color: Colors.white.withOpacity(0.8),
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: const Column(
+              children: [
+                CircleAvatar(
+                  radius: 36,
+                  child: Icon(Icons.person_rounded, size: 40),
                 ),
-              ),
-            ],
+                SizedBox(height: 12),
+                Text(
+                  'Pengunjung Puncak Mas',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                ),
+                SizedBox(height: 4),
+                Text('guest@puncakmas.app', style: TextStyle(color: Colors.black54)),
+              ],
+            ),
           ),
           const SizedBox(height: 16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildStatItem('Transaksi', '$totalTransaksi'),
-              _buildStatDivider(),
-              _buildStatItem('Pengunjung', '$totalPengunjung orang'),
-              _buildStatDivider(),
-              _buildStatItem('Pemasukan', _formatRupiah(totalPemasukan)),
-            ],
+          ElevatedButton.icon(
+            onPressed: onLogout,
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+            icon: const Icon(Icons.logout_rounded),
+            label: const Text('Logout'),
           ),
         ],
       ),
     );
   }
+}
 
-  Widget _buildStatItem(String label, String value) {
-    return Expanded(
-      child: Column(
-        children: [
-          Text(
-            value,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w900,
-            ),
-            textAlign: TextAlign.center,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.65),
-              fontSize: 11,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+class _CardSection extends StatelessWidget {
+  const _CardSection({required this.title, required this.child});
 
-  Widget _buildStatDivider() {
+  final String title;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      width: 1,
-      height: 36,
-      color: Colors.white.withOpacity(0.2),
-    );
-  }
-
-  Widget _buildInputCard() {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Input Transaksi',
-            style: TextStyle(
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
               fontWeight: FontWeight.w800,
               color: Color(0xFF1A2D23),
             ),
           ),
-          const SizedBox(height: 12),
-          TextField(
-            controller: _namaController,
-            decoration: const InputDecoration(
-              labelText: 'Nama Pengunjung',
-              border: OutlineInputBorder(),
-            ),
-          ),
           const SizedBox(height: 10),
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _jumlahController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'Jumlah',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: TextField(
-                  controller: _hargaController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                    labelText: 'Harga',
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton.icon(
-              onPressed: _submitting ? null : _submitTransaksi,
-              icon: _submitting
-                  ? const SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2,
-                        color: Colors.white,
-                      ),
-                    )
-                  : const Icon(Icons.save_rounded),
-              label: Text(_submitting ? 'Menyimpan...' : 'Simpan Transaksi'),
-            ),
-          ),
+          child,
         ],
-      ),
-    );
-  }
-
-  Widget _buildWisataCard(BuildContext context, Wisata item) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => DetailScreen(wisata: item),
-          ),
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          children: [
-            // Avatar / ID badge
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: const Color(0xFF1E6B3C).withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Text(
-                  '#${item.id}',
-                  style: const TextStyle(
-                    color: Color(0xFF1E6B3C),
-                    fontWeight: FontWeight.w800,
-                    fontSize: 13,
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 14),
-            // Info tengah
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.nama,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 15,
-                      color: Color(0xFF1A2D23),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      const Icon(Icons.calendar_today_rounded,
-                          size: 12, color: Colors.grey),
-                      const SizedBox(width: 4),
-                      Text(
-                        _formatTanggal(item.tanggal),
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      const Icon(Icons.people_rounded,
-                          size: 12, color: Colors.grey),
-                      const SizedBox(width: 4),
-                      Text(
-                        '${item.jumlah} orang',
-                        style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            // Total di kanan
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  _formatRupiah(item.total),
-                  style: const TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 14,
-                    color: Color(0xFF1E6B3C),
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () => _confirmDelete(item.id),
-                      icon: const Icon(
-                        Icons.delete_outline_rounded,
-                        color: Colors.redAccent,
-                        size: 20,
-                      ),
-                      tooltip: 'Hapus',
-                    ),
-                    const Icon(Icons.chevron_right_rounded,
-                        color: Colors.grey, size: 18),
-                  ],
-                ),
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }
