@@ -55,4 +55,59 @@ class WisataService {
       throw Exception('Koneksi gagal: $e');
     }
   }
+
+  /// Buat transaksi baru
+  /// Endpoint: POST /wisata
+  Future<Wisata> createTransaksi({
+    required String nama,
+    required int jumlah,
+    required int harga,
+    required String tanggal,
+  }) async {
+    final Uri url = Uri.parse('$_baseUrl/wisata');
+    final body = jsonEncode({
+      'Nama': nama,
+      'Jumlah': jumlah,
+      'Harga': harga,
+      'Tanggal': tanggal,
+    });
+
+    try {
+      final response = await http
+          .post(
+            url,
+            headers: {'Content-Type': 'application/json'},
+            body: body,
+          )
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        return Wisata.fromJson(jsonDecode(response.body));
+      }
+
+      throw Exception('Gagal menambah transaksi: ${response.statusCode}');
+    } catch (e) {
+      throw Exception('Koneksi gagal: $e');
+    }
+  }
+
+  /// Hapus transaksi
+  /// Endpoint: DELETE /wisata/:id
+  Future<void> deleteTransaksi(int id) async {
+    final Uri url = Uri.parse('$_baseUrl/wisata/$id');
+
+    try {
+      final response = await http
+          .delete(url)
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 204 || response.statusCode == 200) {
+        return;
+      }
+
+      throw Exception('Gagal menghapus transaksi: ${response.statusCode}');
+    } catch (e) {
+      throw Exception('Koneksi gagal: $e');
+    }
+  }
 }

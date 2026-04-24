@@ -17,6 +17,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final WisataService _service = WisataService();
   late Future<List<Wisata>> _futureWisata;
+  final TextEditingController _namaController = TextEditingController();
+  final TextEditingController _jumlahController = TextEditingController(
+    text: '1',
+  );
+  final TextEditingController _hargaController = TextEditingController(
+    text: '10000',
+  );
+  bool _submitting = false;
 
   @override
   void initState() {
@@ -24,11 +32,102 @@ class _HomeScreenState extends State<HomeScreen> {
     _futureWisata = _service.fetchAllWisata();
   }
 
+  @override
+  void dispose() {
+    _namaController.dispose();
+    _jumlahController.dispose();
+    _hargaController.dispose();
+    super.dispose();
+  }
+
   /// Refresh data dari API
   void _refresh() {
     setState(() {
       _futureWisata = _service.fetchAllWisata();
     });
+  }
+
+  Future<void> _submitTransaksi() async {
+    final nama = _namaController.text.trim();
+    final jumlah = int.tryParse(_jumlahController.text.trim()) ?? 0;
+    final harga = int.tryParse(_hargaController.text.trim()) ?? 0;
+
+    if (nama.isEmpty) {
+      _showSnackBar('Nama pengunjung wajib diisi.');
+      return;
+    }
+    if (jumlah < 1) {
+      _showSnackBar('Jumlah minimal 1.');
+      return;
+    }
+    if (harga < 0) {
+      _showSnackBar('Harga tidak boleh negatif.');
+      return;
+    }
+
+    setState(() => _submitting = true);
+    try {
+      final tanggal = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      await _service.createTransaksi(
+        nama: nama,
+        jumlah: jumlah,
+        harga: harga,
+        tanggal: tanggal,
+      );
+      _namaController.clear();
+      _jumlahController.text = '1';
+      _hargaController.text = '10000';
+      _refresh();
+      _showSnackBar('Transaksi berhasil disimpan.');
+    } catch (e) {
+      _showSnackBar('Gagal simpan transaksi: $e');
+    } finally {
+      if (mounted) {
+        setState(() => _submitting = false);
+      }
+    }
+  }
+
+  Future<void> _deleteTransaksi(int id) async {
+    try {
+      await _service.deleteTransaksi(id);
+      _refresh();
+      _showSnackBar('Transaksi berhasil dihapus.');
+    } catch (e) {
+      _showSnackBar('Gagal hapus transaksi: $e');
+    }
+  }
+
+  Future<void> _confirmDelete(int id) async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('Hapus transaksi?'),
+          content: const Text('Data ini akan dihapus permanen dari daftar.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('Batal'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: const Text('Hapus'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldDelete == true) {
+      await _deleteTransaksi(id);
+    }
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message)),
+    );
   }
 
   String _formatRupiah(int angka) {
@@ -157,6 +256,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     data.length, totalPengunjung, totalPemasukan),
                 ),
 
+                SliverToBoxAdapter(
+                  child: _buildInputCard(),
+                ),
+
                 // --- Label daftar ---
                 const SliverToBoxAdapter(
                   child: Padding(
@@ -281,6 +384,88 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _buildInputCard() {
+    return Container(
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Input Transaksi',
+            style: TextStyle(
+              fontWeight: FontWeight.w800,
+              color: Color(0xFF1A2D23),
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _namaController,
+            decoration: const InputDecoration(
+              labelText: 'Nama Pengunjung',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _jumlahController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Jumlah',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: TextField(
+                  controller: _hargaController,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    labelText: 'Harga',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton.icon(
+              onPressed: _submitting ? null : _submitTransaksi,
+              icon: _submitting
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                  : const Icon(Icons.save_rounded),
+              label: Text(_submitting ? 'Menyimpan...' : 'Simpan Transaksi'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildWisataCard(BuildContext context, Wisata item) {
     return GestureDetector(
       onTap: () {
@@ -381,8 +566,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const SizedBox(height: 4),
-                const Icon(Icons.chevron_right_rounded,
-                    color: Colors.grey, size: 18),
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () => _confirmDelete(item.id),
+                      icon: const Icon(
+                        Icons.delete_outline_rounded,
+                        color: Colors.redAccent,
+                        size: 20,
+                      ),
+                      tooltip: 'Hapus',
+                    ),
+                    const Icon(Icons.chevron_right_rounded,
+                        color: Colors.grey, size: 18),
+                  ],
+                ),
               ],
             ),
           ],
