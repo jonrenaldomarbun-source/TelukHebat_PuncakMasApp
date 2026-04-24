@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:intl/intl.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/wisata.dart';
 import '../services/wisata_service.dart';
 
@@ -67,7 +70,8 @@ class HomeTab extends StatelessWidget {
       'Mushola',
     ];
 
-    const mapsLink = '';
+    const mapsLink = 'https://maps.app.goo.gl/tEzNYKvrf673fsiy9';
+    const puncakMasPoint = LatLng(-5.395, 105.325);
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
@@ -136,21 +140,51 @@ class HomeTab extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: SizedBox(
+                    height: 200,
+                    child: FlutterMap(
+                      options: const MapOptions(
+                        initialCenter: puncakMasPoint,
+                        initialZoom: 15.5,
+                      ),
+                      children: [
+                        TileLayer(
+                          urlTemplate:
+                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          userAgentPackageName: 'com.puncakmas.app',
+                        ),
+                        const MarkerLayer(
+                          markers: [
+                            Marker(
+                              point: puncakMasPoint,
+                              width: 40,
+                              height: 40,
+                              child: Icon(
+                                Icons.location_on_rounded,
+                                color: Colors.red,
+                                size: 36,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
                 const Text(
-                  'Link maps akan dipakai dari data yang kamu berikan.',
+                  'Puncak Mas - Bandar Lampung',
+                  style: TextStyle(fontWeight: FontWeight.w700),
+                ),
+                const Text(
+                  'Jl. PB. Marga, Sukadana Ham, Kota Bandar Lampung',
                   style: TextStyle(color: Colors.black54),
                 ),
                 const SizedBox(height: 10),
                 ElevatedButton.icon(
-                  onPressed: mapsLink.isEmpty
-                      ? null
-                      : () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Integrasi pembuka maps siap dipasang.'),
-                            ),
-                          );
-                        },
+                  onPressed: () => _openMapsLink(context, mapsLink),
                   icon: const Icon(Icons.map_rounded),
                   label: const Text('Buka Maps'),
                 ),
@@ -165,6 +199,19 @@ class HomeTab extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _openMapsLink(BuildContext context, String mapsLink) async {
+    final uri = Uri.parse(mapsLink);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+      return;
+    }
+
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Gagal membuka link maps.')),
     );
   }
 }
