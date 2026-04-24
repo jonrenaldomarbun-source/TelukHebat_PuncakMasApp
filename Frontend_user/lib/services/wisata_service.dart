@@ -9,7 +9,7 @@ class WisataService {
   // Ganti dengan IP mesin API jika dijalankan di emulator fisik
   // Emulator Android bawaan: gunakan 10.0.2.2
   // Perangkat fisik: gunakan IP lokal komputer, contoh: 192.168.1.x
-  static const String _baseUrl = 'http://10.0.2.2:3000';
+  static const String _baseUrl = 'http://127.0.0.1:3000';
 
   /// Ambil semua data wisata/transaksi dari API
   /// Endpoint: GET /wisata
@@ -17,9 +17,7 @@ class WisataService {
     final Uri url = Uri.parse('$_baseUrl/wisata');
 
     try {
-      final response = await http
-          .get(url)
-          .timeout(const Duration(seconds: 10));
+      final response = await http.get(url).timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         final List<dynamic> jsonList = jsonDecode(response.body);
@@ -40,9 +38,7 @@ class WisataService {
     final Uri url = Uri.parse('$_baseUrl/wisata/$id');
 
     try {
-      final response = await http
-          .get(url)
-          .timeout(const Duration(seconds: 10));
+      final response = await http.get(url).timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200) {
         return Wisata.fromJson(jsonDecode(response.body));
@@ -97,9 +93,8 @@ class WisataService {
     final Uri url = Uri.parse('$_baseUrl/wisata/$id');
 
     try {
-      final response = await http
-          .delete(url)
-          .timeout(const Duration(seconds: 10));
+      final response =
+          await http.delete(url).timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 204 || response.statusCode == 200) {
         return;
