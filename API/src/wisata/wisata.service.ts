@@ -1,94 +1,71 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Wisata } from './entities/wisata.entity';
 import type { CreateWisataDto } from './dto/create-wisata.dto';
 import type { UpdateWisataDto } from './dto/update-wisata-dto';
 
 @Injectable()
 export class WisataService {
-    // Data dummy disesuaikan dengan form CMS Transaksi
-    private wisata = [
-        {
-            id: 1,
-            tanggal: "2026-04-17",
-            nama: "bomay",
-            jumlah: 5,
-            hargaTiket: 50000,
-            total: 250000 // Hasil dari 5 * 50000
-        }
-    ];
+    constructor(
+        @InjectRepository(Wisata)
+        private readonly wisataRepo: Repository<Wisata>, // Pipa ke MySQL
+    ) { }
 
-    private idCounter = 2; // Mulai dari 2 karena ID 1 sudah terpakai
-
-    findAll() {
-        return this.wisata;
+    // Ambil semua data dari tabel MySQL
+    async findAll() {
+        return await this.wisataRepo.find();
     }
 
-    findOne(id: number) {
-        const matchingWisata = this.wisata.find((wisata) => wisata.id === id);
-
-        if (!matchingWisata) {
-            throw new NotFoundException(`Data transaksi dengan ID ${id} tidak ditemukan.`);
-        }
-
-        return matchingWisata;
+    // Cari satu data berdasarkan ID
+    async findOne(id: number) {
+        const data = await this.wisataRepo.findOne({ where: { id } });
+        if (!data) throw new NotFoundException(`ID ${id} tidak ada di DB`);
+        return data;
     }
 
-    create(createWisataDto: CreateWisataDto) {
-        // Hitung total secara otomatis
-        const totalHitung = createWisataDto.Jumlah * createWisataDto.Harga;
+    // Simpan data baru ke MySQL
+    async create(dto: CreateWisataDto) {
+        const totalHitung = dto.Jumlah * dto.Harga;
 
-        const createdWisata = {
-            id: this.idCounter++,
-            // Mapping secara manual agar sinkron dengan property di array 'wisata'
-            tanggal: createWisataDto.Tanggal,
-            nama: createWisataDto.Nama,
-            jumlah: createWisataDto.Jumlah,
-            hargaTiket: createWisataDto.Harga,
-            total: totalHitung
-        };
+        const newRecord = this.wisataRepo.create({
+            tanggal: new Date(dto.Tanggal),
+            nama: dto.Nama,
+            jumlah: dto.Jumlah,
+            hargaTiket: dto.Harga,
+            total: totalHitung,
+        });
 
-        this.wisata.push(createdWisata);
-        return createdWisata;
+        return await this.wisataRepo.save(newRecord);
     }
 
-    update(id: number, updateWisataDto: UpdateWisataDto) {
-        const index = this.wisata.findIndex((item) => item.id === id);
+    // Update data di MySQL
+    async update(id: number, dto: UpdateWisataDto) {
+        const dataLama = await this.findOne(id);
 
-        if (index === -1) {
-            throw new NotFoundException(`Data dengan ID ${id} tidak ditemukan.`);
-        }
+        // Pastikan variabel penampung menggunakan nilai baru jika ada, jika tidak pakai data lama
+        const namaBaru = dto.Nama ?? dataLama.nama;
+        const tanggalBaru = dto.Tanggal ? new Date(dto.Tanggal) : dataLama.tanggal;
+        const jumlahBaru = dto.Jumlah ?? dataLama.jumlah;
+        const hargaBaru = dto.Harga ?? dataLama.hargaTiket;
+        const totalBaru = jumlahBaru * hargaBaru;
 
-        // 1. Ambil data lama yang lengkap (nama, tanggal, jumlah, dll)
-        const dataLama = this.wisata[index];
+        const updatedData = await this.wisataRepo.preload({
+            id: id,
+            nama: namaBaru,
+            tanggal: tanggalBaru,
+            jumlah: jumlahBaru,
+            hargaTiket: hargaBaru,
+            total: totalBaru,
+        });
 
-        // 2. Gabungkan secara manual dan sangat spesifik.
-        // Jika field di DTO kosong, kita tetap pakai data yang lama (dataLama).
-        const dataBaru = {
-            id: dataLama.id, // ID tetap pakai yang lama
-            tanggal: updateWisataDto.Tanggal ?? dataLama.tanggal,
-            nama: updateWisataDto.Nama ?? dataLama.nama,
-            jumlah: updateWisataDto.Jumlah ?? dataLama.jumlah,
-            hargaTiket: updateWisataDto.Harga ?? dataLama.hargaTiket,
-            total: 0 // Akan dihitung di bawah
-        };
-
-        // 3. Hitung ulang totalnya berdasarkan data yang sudah pasti ada
-        dataBaru.total = dataBaru.jumlah * dataBaru.hargaTiket;
-
-        // 4. Masukkan kembali ke array memory
-        this.wisata[index] = dataBaru;
-
-        return dataBaru;
+        if (!updatedData) throw new NotFoundException('Update gagal');
+        return await this.wisataRepo.save(updatedData);
     }
 
-    remove(id: number): void {
-        const matchingWisataIndex = this.wisata.findIndex(
-            (wisata) => wisata.id === id
-        );
-
-        if (matchingWisataIndex === -1) {
-            throw new NotFoundException(`Data transaksi dengan ID ${id} tidak ditemukan.`);
-        }
-
-        this.wisata.splice(matchingWisataIndex, 1);
+    // Hapus data dari MySQL
+    async remove(id: number) {
+        const data = await this.findOne(id);
+        return await this.wisataRepo.remove(data);
     }
 }
