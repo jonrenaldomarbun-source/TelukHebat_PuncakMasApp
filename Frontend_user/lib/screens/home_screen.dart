@@ -565,6 +565,39 @@ class _TiketTabState extends State<TiketTab> {
                     : const Icon(Icons.shopping_cart_checkout_rounded),
                 label: Text(_loading ? 'Memproses...' : 'Beli Sekarang'),
               ),
+              const SizedBox(height: 16),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE8F5EE),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.only(top: 2, right: 12),
+                      child: Icon(
+                        Icons.info_outline_rounded,
+                        color: Color(0xFF2D9B57),
+                        size: 22,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    Expanded(
+                      child: Text(
+                        'Silahkan lanjutkan pembayaran dengan menunjukkan pembelian tiket ke admin tiket',
+                        style: TextStyle(
+                          color: Color(0xFF234B3A),
+                          fontSize: 14,
+                          height: 1.5,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           );
         },
