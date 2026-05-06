@@ -671,6 +671,120 @@ class _TransaksiTabState extends State<TransaksiTab> {
     }
   }
 
+  Widget _buildTransactionCard(
+      Wisata item, int position, NumberFormat formatter) {
+    return _PressableCard(
+      onTap: () {},
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 46,
+            height: 46,
+            decoration: BoxDecoration(
+              color: const Color(0xFFEFF7F1),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Center(
+              child: Text(
+                '#$position',
+                style: const TextStyle(
+                  color: _NatureTheme.primary,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.nama,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                    color: _NatureTheme.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.calendar_today_rounded,
+                      size: 14,
+                      color: Color(0xFF7B8A86),
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        _formatDate(item.tanggal),
+                        style: const TextStyle(
+                          fontSize: 13,
+                          color: Color(0xFF7B8A86),
+                          height: 1.4,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.confirmation_number_rounded,
+                      size: 14,
+                      color: Color(0xFF7B8A86),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      '${item.jumlah} tiket',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        color: Color(0xFF7B8A86),
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 14),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                formatter.format(item.total),
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
+                  color: Color(0xFF2A6B45),
+                ),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                width: 38,
+                height: 38,
+                child: IconButton(
+                  onPressed: () => _delete(item.id),
+                  icon: const Icon(
+                    Icons.delete_outline_rounded,
+                    color: Colors.redAccent,
+                    size: 22,
+                  ),
+                  padding: EdgeInsets.zero,
+                  splashRadius: 24,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final formatter = NumberFormat.currency(
@@ -715,61 +829,7 @@ class _TransaksiTabState extends State<TransaksiTab> {
                 separatorBuilder: (_, __) => const SizedBox(height: 10),
                 itemBuilder: (context, index) {
                   final item = data[index];
-                  return _PressableCard(
-                    onTap: () {},
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          backgroundColor: const Color(0xFFE8F5EE),
-                          child: Text(
-                            '#${item.id}',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w700,
-                              color: _NatureTheme.textPrimary,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item.nama,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.w800),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                '${_formatDate(item.tanggal)} • ${item.jumlah} tiket',
-                                style: const TextStyle(
-                                    color: _NatureTheme.textSecondary),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              formatter.format(item.total),
-                              style: const TextStyle(
-                                color: _NatureTheme.primary,
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () => _delete(item.id),
-                              icon: const Icon(
-                                Icons.delete_outline_rounded,
-                                color: Colors.redAccent,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
+                  return _buildTransactionCard(item, index + 1, formatter);
                 },
               );
             },
