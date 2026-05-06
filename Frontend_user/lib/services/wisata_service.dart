@@ -15,9 +15,7 @@ class WisataService {
     }
   }
 
-  /// ===============================
   /// GET: Ambil semua data wisata
-  /// ===============================
   Future<List<Wisata>> fetchAllWisata() async {
     final Uri url = Uri.parse('$_baseUrl/wisata');
 
@@ -37,9 +35,7 @@ class WisataService {
     }
   }
 
-  /// ===============================
   /// GET: Ambil data by ID
-  /// ===============================
   Future<Wisata> fetchWisataById(int id) async {
     final Uri url = Uri.parse('$_baseUrl/wisata/$id');
 
@@ -60,9 +56,7 @@ class WisataService {
     }
   }
 
-  /// ===============================
   /// POST: Buat transaksi
-  /// ===============================
   Future<Wisata> createTransaksi({
     required String nama,
     required int jumlah,
@@ -102,9 +96,7 @@ class WisataService {
     }
   }
 
-  /// ===============================
   /// DELETE: Hapus transaksi
-  /// ===============================
   Future<void> deleteTransaksi(int id) async {
     final Uri url = Uri.parse('$_baseUrl/wisata/$id');
 

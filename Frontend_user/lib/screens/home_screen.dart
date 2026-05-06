@@ -16,7 +16,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   bool _contentVisible = true;
-  final GlobalKey<_TransaksiTabState> _transaksiKey = GlobalKey<_TransaksiTabState>();
+  final GlobalKey<_TransaksiTabState> _transaksiKey =
+      GlobalKey<_TransaksiTabState>();
 
   Future<void> _onDestinationSelected(int index) async {
     if (_currentIndex == index) return;
@@ -81,10 +82,27 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class HomeTab extends StatelessWidget {
+class HomeTab extends StatefulWidget {
   const HomeTab({super.key, required this.onOpenTiket});
 
   final VoidCallback onOpenTiket;
+
+  @override
+  State<HomeTab> createState() => _HomeTabState();
+}
+
+class _HomeTabState extends State<HomeTab> {
+  bool _showAllImages = false;
+
+  final List<String> _galleryImageUrls = [
+    // taruh gambar dibawah ini
+    'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/14/31/49/c2/pesona-indonesia.jpg?w=1400&h=-1&s=1',
+    'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/d4/4b/00/20181224-123439-largejpg.jpg?w=1000&h=-1&s=1',
+    'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1d/1f/1e/93/caption.jpg?w=1100&h=-1&s=1',
+    'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/13/60/f4/86/puncak-mas-bandar-lampung.jpg?w=1400&h=-1&s=1',
+    'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/15/64/bf/f0/img-20181110-215322-largejpg.jpg?w=1400&h=-1&s=1',
+    'https://dynamic-media-cdn.tripadvisor.com/media/photo-o/13/60/f4/85/puncak-mas-bandar-lampung.jpg?w=1400&h=-1&s=1',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -176,6 +194,8 @@ class HomeTab extends StatelessWidget {
                   ),
                 ),
               ),
+              const SizedBox(height: 12),
+              _buildGallerySection(),
               const SizedBox(height: 12),
               _CardSection(
                 title: 'Fasilitas Utama',
@@ -278,7 +298,7 @@ class HomeTab extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               FilledButton.icon(
-                onPressed: onOpenTiket,
+                onPressed: widget.onOpenTiket,
                 style: FilledButton.styleFrom(
                   backgroundColor: _NatureTheme.secondary,
                   foregroundColor: Colors.white,
@@ -292,6 +312,86 @@ class HomeTab extends StatelessWidget {
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildGallerySection() {
+    final visibleImages =
+        _showAllImages ? _galleryImageUrls : _galleryImageUrls.take(4).toList();
+
+    return _CardSection(
+      title: 'Galeri Wisata',
+      icon: Icons.photo_library_rounded,
+      child: Column(
+        children: [
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: visibleImages.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 10,
+              crossAxisSpacing: 10,
+              childAspectRatio: 1,
+            ),
+            itemBuilder: (context, index) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(16),
+                child: Image.network(
+                  visibleImages[index],
+                  fit: BoxFit.cover,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) return child;
+                    return Container(
+                      color: const Color(0xFFE8F5EE),
+                      child: const Center(
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    );
+                  },
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: const Color(0xFFF0F0F0),
+                      child: const Center(
+                        child: Icon(Icons.broken_image_rounded,
+                            color: Colors.grey),
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 12),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton(
+              onPressed: () {
+                setState(() {
+                  _showAllImages = !_showAllImages;
+                });
+              },
+              style: TextButton.styleFrom(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                backgroundColor: Colors.white,
+              ),
+              child: Text(
+                _showAllImages
+                    ? 'Tampilkan lebih sedikit'
+                    : 'Lihat lebih banyak',
+                style: const TextStyle(
+                  color: Color(0xFF1E6B3C),
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
