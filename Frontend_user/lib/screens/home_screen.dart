@@ -16,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   bool _contentVisible = true;
+  final GlobalKey<_TransaksiTabState> _transaksiKey = GlobalKey<_TransaksiTabState>();
 
   Future<void> _onDestinationSelected(int index) async {
     if (_currentIndex == index) return;
@@ -32,8 +33,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final pages = [
       HomeTab(onOpenTiket: () => setState(() => _currentIndex = 1)),
-      TiketTab(onSuccessBuy: () => setState(() => _currentIndex = 2)),
-      const TransaksiTab(),
+      TiketTab(onSuccessBuy: () {
+        _transaksiKey.currentState?._refresh();
+        setState(() => _currentIndex = 2);
+      }),
+      TransaksiTab(key: _transaksiKey),
       AkunTab(
         onLogout: () {
           setState(() => _currentIndex = 0);
