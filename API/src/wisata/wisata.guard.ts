@@ -1,28 +1,36 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 
+/**
+ * WisataGuard adalah "Satpam" digital.
+ * Gunanya untuk mencegat tamu yang ingin menambah, mengubah, atau menghapus data.
+ */
 @Injectable()
 export class WisataGuard implements CanActivate {
+  
+  // Fungsi utama: "Boleh masuk tidak?"
   canActivate(context: ExecutionContext): boolean {
+    // 1. Ambil data tamu yang datang (request)
     const request = context.switchToHttp().getRequest();
     
-    // Memanggil fungsi authenticate yang ada di bawah
+    // 2. Suruh satpam cek kunci aksesnya
     return this.authenticate(request);
   }
 
   // Fungsi pengecekan kunci akses
   authenticate(request: any): boolean {
-    // Di Express/NestJS, keys dari headers otomatis menjadi huruf kecil (lowercase)
+    // Mengambil 'catatan' dari tamu di bagian 'authorization' (biasanya di Header)
     const authHeader = request.headers['authorization'];
 
-    // Kunci rahasia CMS
+    // Ini adalah password rahasia yang harus dibawa tamu
     const KUNCI_RAHASIA = 'Admin123';
 
-    // Mendukung format "PuncakMasAdmin123" langsung atau "Bearer PuncakMasAdmin123"
+    // Cek apakah tamu membawa kunci yang tepat?
+    // Bisa dalam bentuk "Admin123" saja, atau "Bearer Admin123"
     if (authHeader === KUNCI_RAHASIA || authHeader === `Bearer ${KUNCI_RAHASIA}`) {
-      return true; // Pintu dibuka, boleh CRUD
+      return true; // Kunci cocok! Silakan masuk (CRUD diizinkan)
     }
 
-    // Jika kunci salah atau tidak ada, lempar error 401
+    // Jika kunci salah atau tamu tidak bawa kunci sama sekali
     throw new UnauthorizedException('Akses Ditolak: Kunci CMS tidak valid!');
   }
 }
