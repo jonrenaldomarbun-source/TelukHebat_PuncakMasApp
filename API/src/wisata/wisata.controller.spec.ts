@@ -20,6 +20,6 @@ describe('WisataController', () => {
 
   // Tes paling dasar: mengecek apakah kontroler sudah ada dan tidak kosong (error)
   it('should be defined', () => {
-    expect(controller).toBeDefined(); // "Ekspektasinya, kontroler ini harus ada nilainya"
+    expect(controller).toBeDefined(); 
   });
 });
