@@ -11,7 +11,7 @@ export default function Wisata() {
     deskripsi:
       "Puncak Mas merupakan destinasi wisata ikonik di atas perbukitan Kota Bandar Lampung. Menawarkan kombinasi sempurna antara udara sejuk pegunungan dan panorama perkotaan dari ketinggian. Tempat ini menjadi favorit keluarga untuk menikmati sunset dan keindahan lampu kota di malam hari.",
     gambar:
-      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=1000",
+      "https://yawisata.com/wp-content/uploads/2023/01/puncak-mas-lampung.jpg",
     fasilitas: [
       "🎡 Spot Foto Instagramable",
       "🚗 Area Parkir Luas",

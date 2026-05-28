@@ -14,7 +14,7 @@ export default function Transaksi() {
   const [data, setData] = useState<TransaksiType[]>([]);
   const [nama, setNama] = useState("");
   const [jumlah, setJumlah] = useState(1);
-  const [harga, setHarga] = useState(10000);
+  const [harga, setHarga] = useState(20000);
   const [loading, setLoading] = useState(false);
 
   // --- STATE TOKEN BARU ---
@@ -63,7 +63,7 @@ export default function Transaksi() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // <--- Kirim Token ke NestJS
+          "Authorization": `Bearer ${token}` // Kirim Token ke NestJS
         },
         body: JSON.stringify(payload),
       });
@@ -72,7 +72,7 @@ export default function Transaksi() {
         fetchData();
         setNama("");
         setJumlah(1);
-        setHarga(10000);
+        setHarga(20000);
       } else {
         const errorRes = await res.json();
         alert(`Gagal: ${errorRes.message || "Akses Ditolak!"}`);
@@ -90,7 +90,7 @@ export default function Transaksi() {
       const res = await fetch(`${API_URL}/${id}`, {
         method: "DELETE",
         headers: {
-          "Authorization": `Bearer ${token}` // <--- Kirim Token ke NestJS
+          "Authorization": `Bearer ${token}` //  Kirim Token ke NestJS
         }
       });
 

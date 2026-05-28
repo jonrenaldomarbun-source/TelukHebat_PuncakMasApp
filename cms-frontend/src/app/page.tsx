@@ -43,8 +43,8 @@ export default function Home() {
         </h1>
 
         <p className="text-slate-500 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed font-medium">
-          Solusi terintegrasi untuk pengelolaan destinasi wisata.
-          Pantau transaksi, data pengunjung, dan kelola konten dalam satu dasbor yang cerdas.
+          Kelola seluruh aktivitas wisata Puncak Mas Lampung mulai dari transaksi tiket, 
+          data pengunjung, hingga informasi destinasi dalam satu sistem yang modern dan efisien.
         </p>
       </div>
 
