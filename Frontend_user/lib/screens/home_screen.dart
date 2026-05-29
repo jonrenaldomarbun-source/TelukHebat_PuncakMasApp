@@ -5,6 +5,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/wisata.dart';
 import '../services/wisata_service.dart';
+import 'login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -41,7 +42,15 @@ class _HomeScreenState extends State<HomeScreen> {
       TransaksiTab(key: _transaksiKey),
       AkunTab(
         onLogout: () {
-          setState(() => _currentIndex = 0);
+          // Navigate back to LoginScreen on logout
+          Navigator.of(context).pushReplacement(
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) => const LoginScreen(),
+              transitionsBuilder: (_, anim, __, child) =>
+                  FadeTransition(opacity: anim, child: child),
+              transitionDuration: const Duration(milliseconds: 300),
+            ),
+          );
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Logout berhasil.')),
           );
