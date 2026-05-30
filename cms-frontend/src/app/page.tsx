@@ -10,7 +10,7 @@ export default function Home() {
   useEffect(() => {
     const isLogin = localStorage.getItem("isLogin");
     if (!isLogin) {
-      router.push("/login");
+      router.push("/dashboard");
     }
   }, []);
 
@@ -112,7 +112,7 @@ function MenuCard({
   return (
     <Link href={href} className="group">
       <div
-        className={`h-full bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${color}`}
+        className="h-full bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${color}"
       >
         <div className="text-4xl mb-6 group-hover:scale-125 transition-transform">
           {emoji}
