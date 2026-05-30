@@ -48,35 +48,37 @@ export default function Pengunjung() {
             {loading ? (
               <p className="p-6 text-center text-slate-400">Loading...</p>
             ) : (
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="bg-slate-50 text-slate-400 text-[10px] uppercase font-black tracking-widest border-b">
-                    <th className="p-4">Tanggal</th>
-                    <th className="p-4 text-center">Jumlah</th>
-                    <th className="p-4 text-right">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100 overflow-y-auto">
-                  {data.map((item) => (
-                    <tr key={item.id} className="hover:bg-slate-50 transition-colors">
-                      <td className="p-4">
-                        <span className="text-xs font-mono bg-slate-100 px-2 py-1 rounded text-slate-500">
-                          {new Date(item.tanggal).toLocaleDateString("id-ID")}
-                        </span>
-                      </td>
-                      <td className="p-4 text-center font-bold text-slate-800">
-                        {item.jumlah}
-                      </td>
-                      <td className="p-4 text-right">
-                        <span className="bg-green-100 text-green-600 text-[10px] font-bold px-3 py-1 rounded-full uppercase">
-                          Recorded
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
+              <div className="overflow-y-auto h-[420px]">
+                 <table className="w-full text-left">
+                    <thead>
+                      <tr className="bg-slate-50 text-slate-400 text-[10px] uppercase font-black tracking-widest border-b">
+                        <th className="p-4">Tanggal</th>
+                        <th className="p-4 text-center">Jumlah</th>
+                        <th className="p-4 text-right">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 overflow-y-auto">
+                      {data.map((item) => (
+                        <tr key={item.id} className="hover:bg-slate-50 transition-colors">
+                          <td className="p-4">
+                            <span className="text-xs font-mono bg-slate-100 px-2 py-1 rounded text-slate-500">
+                              {new Date(item.tanggal).toLocaleDateString("id-ID")}
+                            </span>
+                          </td>
+                          <td className="p-4 text-center font-bold text-slate-800">
+                            {item.jumlah}
+                          </td>
+                          <td className="p-4 text-right">
+                            <span className="bg-green-100 text-green-600 text-[10px] font-bold px-3 py-1 rounded-full uppercase">
+                              Recorded
+                            </span>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+                )}
           </div>
 
           {/* TOTAL (READ ONLY) */}
