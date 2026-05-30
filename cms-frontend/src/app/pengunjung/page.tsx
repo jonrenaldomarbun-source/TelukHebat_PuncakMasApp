@@ -82,29 +82,36 @@ export default function Pengunjung() {
           </div>
 
           {/* TOTAL (READ ONLY) */}
-          <div className="bg-blue-500 p-6 rounded-2xl shadow-lg shadow-blue-100 text-white flex flex-col justify-center items-center text-center h-[220px]">
-            <p className="text-blue-100 text-xs font-bold uppercase">
-              Total Pengunjung
-            </p>
-            <p className="text-4xl font-black mt-2">
-              {totalPengunjung}
-            </p>
-            <span className="text-sm mt-1">Orang</span>
-          </div>
-        </div>
+          <div className="flex flex-col gap-6">
 
-        {/* GRAFIK */}
-        <div className="flex justify-center">
-          <div className="w-full md:w-2/3 bg-white p-8 rounded-[2rem] border border-slate-100 shadow-sm text-center">
-            <h3 className="text-xl font-black mb-4">Grafik Mingguan</h3>
-            <div className="h-48 w-full bg-slate-50 rounded-3xl flex items-center justify-center border-2 border-dashed border-slate-200">
-              <p className="text-slate-400 text-sm font-bold italic">
-                Belum ada grafik (bisa pakai Chart.js nanti)
+            {/* TOTAL */}
+            <div className="bg-blue-500 p-6 rounded-2xl shadow-lg shadow-blue-100 text-white flex flex-col justify-center items-center text-center">
+              <p className="text-blue-100 text-xs font-bold uppercase">
+                Total Pengunjung
               </p>
+
+              <p className="text-5xl font-black mt-2">
+                {totalPengunjung}
+              </p>
+
+              <span className="text-sm mt-1">Orang</span>
             </div>
+
+            {/* GRAFIK */}
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center">
+              <h3 className="text-lg font-black mb-4">
+                Grafik Mingguan
+              </h3>
+
+              <div className="h-40 bg-slate-50 rounded-2xl flex items-center justify-center border-2 border-dashed border-slate-200">
+                <p className="text-slate-400 text-sm font-bold italic">
+                  Belum ada grafik
+                </p>
+              </div>
+            </div>
+
           </div>
         </div>
-
       </div>
     </div>
   );
