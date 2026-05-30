@@ -56,7 +56,7 @@ export default function Pengunjung() {
                     <th className="p-4 text-right">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100">
+                <tbody className="divide-y divide-slate-100 overflow-y-auto">
                   {data.map((item) => (
                     <tr key={item.id} className="hover:bg-slate-50 transition-colors">
                       <td className="p-4">
