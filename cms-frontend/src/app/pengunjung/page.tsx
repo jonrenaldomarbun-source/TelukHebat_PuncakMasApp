@@ -84,7 +84,7 @@ export default function Pengunjung() {
             <p className="text-blue-100 text-xs font-bold uppercase">
               Total Pengunjung
             </p>
-            <p className="text-5xl font-black mt-2">
+            <p className="text-4xl font-black mt-2">
               {totalPengunjung}
             </p>
             <span className="text-sm mt-1">Orang</span>
