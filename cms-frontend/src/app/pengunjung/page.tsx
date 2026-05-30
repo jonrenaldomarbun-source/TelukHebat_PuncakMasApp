@@ -61,7 +61,7 @@ export default function Pengunjung() {
                     <tr key={item.id} className="hover:bg-slate-50 transition-colors">
                       <td className="p-4">
                         <span className="text-xs font-mono bg-slate-100 px-2 py-1 rounded text-slate-500">
-                          {item.tanggal}
+                          {new Date(item.tanggal).toLocaleDateString("id-ID")}
                         </span>
                       </td>
                       <td className="p-4 text-center font-bold text-slate-800">
