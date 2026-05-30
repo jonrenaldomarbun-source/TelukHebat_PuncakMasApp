@@ -80,7 +80,7 @@ export default function Pengunjung() {
           </div>
 
           {/* TOTAL (READ ONLY) */}
-          <div className="bg-blue-500 p-6 rounded-2xl shadow-lg shadow-blue-100 text-white flex flex-col justify-center items-center text-center">
+          <div className="bg-blue-500 p-6 rounded-2xl shadow-lg shadow-blue-100 text-white flex flex-col justify-center items-center text-center h-[220px]">
             <p className="text-blue-100 text-xs font-bold uppercase">
               Total Pengunjung
             </p>
