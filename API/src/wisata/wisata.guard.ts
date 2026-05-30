@@ -1,36 +1,51 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt'; // 1. Ambil JwtService bawaan NestJS
 
 /**
- * WisataGuard adalah "Satpam" digital.
- * Gunanya untuk mencegat tamu yang ingin menambah, mengubah, atau menghapus data.
+ * WisataGuard sekarang menjadi Satpam Digital berbasis Token JWT.
+ * Menggantikan sistem kunci statis 'Admin123' menjadi kunci dinamis hasil login admin.
  */
 @Injectable()
 export class WisataGuard implements CanActivate {
   
-  // Fungsi utama: "Boleh masuk tidak?"
-  canActivate(context: ExecutionContext): boolean {
-    // 1. Ambil data tamu yang datang (request)
+  // 2. Suntikkan JwtService ke dalam constructor satpam
+  constructor(private jwtService: JwtService) {}
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    
-    // 2. Suruh satpam cek kunci aksesnya
     return this.authenticate(request);
   }
 
-  // Fungsi pengecekan kunci akses
-  authenticate(request: any): boolean {
-    // Mengambil 'catatan' dari tamu di bagian 'authorization' (biasanya di Header)
+  async authenticate(request: any): Promise<boolean> {
     const authHeader = request.headers['authorization'];
 
-    // Ini adalah password rahasia yang harus dibawa tamu
-    const KUNCI_RAHASIA = 'Admin123';
-
-    // Cek apakah tamu membawa kunci yang tepat?
-    // Bisa dalam bentuk "Admin123" saja, atau "Bearer Admin123"
-    if (authHeader === KUNCI_RAHASIA || authHeader === `Bearer ${KUNCI_RAHASIA}`) {
-      return true; // Kunci cocok! Silakan masuk (CRUD diizinkan)
+    // Cek apakah tamu membawa token di headernya
+    if (!authHeader) {
+      throw new UnauthorizedException('Akses Ditolak: Token tidak ditemukan! Silakan login dulu.');
     }
 
-    // Jika kunci salah atau tamu tidak bawa kunci sama sekali
-    throw new UnauthorizedException('Akses Ditolak: Kunci CMS tidak valid!');
+    // Memisahkan kata 'Bearer' dengan Token aslinya
+    // Contoh: "Bearer eyJhbGciOi..." -> ["Bearer", "eyJhbGciOi..."]
+    const parts = authHeader.split(' ');
+    if (parts.length !== 2 || parts[0] !== 'Bearer') {
+      throw new UnauthorizedException('Akses Ditolak: Format token salah (Harus menggunakan format Bearer)!');
+    }
+
+    const token = parts[1];
+
+    try {
+      // 3. Satpam memeriksa validitas token menggunakan Kunci Rahasia JWT Admin
+      const payload = await this.jwtService.verifyAsync(token, {
+        secret: 'KUNCI_RAHASIA_ADMIN', // Harus sama persis dengan secret di AuthModule
+      });
+
+      // Menempelkan data identitas Admin ke dalam request (jika nanti butuh di controller)
+      request['admin'] = payload;
+
+      return true; // Token sah! Admin diizinkan melakukan CRUD wisata
+    } catch (error) {
+      // Jika token kedaluwarsa (lewat 1 hari) atau hasil manipulasi
+      throw new UnauthorizedException('Akses Ditolak: Token kedaluwarsa atau tidak valid!');
+    }
   }
 }
