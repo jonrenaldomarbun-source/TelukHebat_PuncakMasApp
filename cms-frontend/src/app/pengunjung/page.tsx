@@ -146,21 +146,28 @@ const formatRupiah = (angka: number) => {
           {/* TOTAL (READ ONLY) */}
           <div className="flex flex-col gap-6">
 
-            {/* TOTAL */}
-            <div className="bg-blue-500 p-6 rounded-2xl shadow-lg shadow-blue-100 text-white flex flex-col justify-center items-center text-center">
-              <p className="text-blue-100 text-xs font-bold uppercase">
-                {tanggalAwal || tanggalAkhir
-                  ? "Laporan Pengunjung"
-                  : "Total Pengunjung"}
+            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+              <p className="text-xs uppercase font-bold text-slate-500 mb-2">
+                Ringkasan Laporan
               </p>
 
-              <p className="text-5xl font-black mt-2">
-                {totalPengunjung}
-              </p>
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span>Total Pengunjung</span>
+                  <span className="font-bold">
+                    {totalPengunjung} Orang
+                  </span>
+                </div>
 
-              <span className="text-sm mt-1">Orang</span>
+                <div className="flex justify-between">
+                  <span>Total Pemasukan</span>
+                  <span className="font-bold text-green-600">
+                    {formatRupiah(totalPemasukan)}
+                  </span>
+                </div>
+              </div>
             </div>
-
+            
             {/* GRAFIK */}
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center">
               <h3 className="text-lg font-black mb-4">
