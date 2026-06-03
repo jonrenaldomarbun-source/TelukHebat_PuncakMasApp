@@ -117,7 +117,7 @@ export default function Transaksi() {
             <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
               📊 Manajemen Transaksi
             </h1>
-            <p className="text-slate-500 mt-1">Sistem Terkunci Guard (Ketik 'Admin123' untuk akses)</p>
+            <p className="text-slate-500 mt-1">Sistem Terkunci Guard (Masukan Kode JWT diawal yang sudah di copy)</p>
           </div>
           <div className="bg-white px-6 py-4 rounded-2xl shadow-sm border border-slate-200 flex items-center gap-4">
             <div className="bg-green-100 p-3 rounded-full text-green-600 font-bold text-xl">💰</div>
@@ -193,35 +193,37 @@ export default function Transaksi() {
 
           {/* TABLE */}
           <div className="lg:col-span-8">
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="bg-slate-50 text-slate-400 text-[10px] uppercase font-black tracking-widest border-b">
-                    <th className="p-4">Tanggal</th>
-                    <th className="p-4">Pengunjung</th>
-                    <th className="p-4">Qty</th>
-                    <th className="p-4 text-right">Total</th>
-                    <th className="p-4 text-center">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {data.length > 0 ? (
-                    data.map((item) => (
-                      <tr key={item.id} className="hover:bg-slate-50 transition-colors">
-                        <td className="p-4 text-xs font-mono text-slate-400">{item.tanggal}</td>
-                        <td className="p-4 font-bold text-slate-700">{item.nama}</td>
-                        <td className="p-4 text-slate-500">{item.jumlah}x</td>
-                        <td className="p-4 text-right font-black text-blue-600">{formatRupiah(item.total)}</td>
-                        <td className="p-4 text-center">
-                          <button onClick={() => handleDelete(item.id)} className="hover:scale-125 transition-transform">🗑️</button>
-                        </td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr><td colSpan={5} className="p-12 text-center opacity-20 font-bold italic">Belum ada data...</td></tr>
-                  )}
-                </tbody>
-              </table>
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden h-[420px]">
+              <div className="overflow-y-auto h-[420px]">
+                 <table className="w-full text-left">
+                  <thead>
+                    <tr className="bg-slate-50 text-slate-400 text-[10px] uppercase font-black tracking-widest border-b">
+                      <th className="p-4">Tanggal</th>
+                      <th className="p-4">Pengunjung</th>
+                      <th className="p-4">Qty</th>
+                      <th className="p-4 text-right">Total</th>
+                      <th className="p-4 text-center">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {data.length > 0 ? (
+                      data.map((item) => (
+                        <tr key={item.id} className="hover:bg-slate-50 transition-colors">
+                          <td className="p-4 text-xs font-mono text-slate-400">{item.tanggal}</td>
+                          <td className="p-4 font-bold text-slate-700">{item.nama}</td>
+                          <td className="p-4 text-slate-500">{item.jumlah}x</td>
+                          <td className="p-4 text-right font-black text-blue-600">{formatRupiah(item.total)}</td>
+                          <td className="p-4 text-center">
+                            <button onClick={() => handleDelete(item.id)} className="hover:scale-125 transition-transform">🗑️</button>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr><td colSpan={5} className="p-12 text-center opacity-20 font-bold italic">Belum ada data...</td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
