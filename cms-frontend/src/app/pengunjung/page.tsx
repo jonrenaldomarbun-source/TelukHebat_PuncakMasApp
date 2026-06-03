@@ -10,7 +10,8 @@ type PengunjungType = {
 export default function Pengunjung() {
   const [data, setData] = useState<PengunjungType[]>([]);
   const [loading, setLoading] = useState(false);
-  const [tanggalFilter, setTanggalFilter] = useState("");
+  const [tanggalAwal, setTanggalAwal] = useState("");
+  const [tanggalAkhir, setTanggalAkhir] = useState("");
 
   const API_URL = "http://localhost:3000/wisata";
 
@@ -31,12 +32,16 @@ export default function Pengunjung() {
     fetchData();
   }, []);
 
-  const filteredData = tanggalFilter
-  ? data.filter(
-      (item) =>
-        new Date(item.tanggal).toISOString().split("T")[0] === tanggalFilter
-    )
-  : data;
+  const filteredData = data.filter((item) => {
+    const tanggalData = new Date(item.tanggal);
+    const awal = tanggalAwal ? new Date(tanggalAwal) : null;
+    const akhir = tanggalAkhir ? new Date(tanggalAkhir) : null;
+
+    if (awal && tanggalData < awal) return false;
+    if (akhir && tanggalData > akhir) return false;
+
+    return true;
+  });
 
 const totalPengunjung = filteredData.reduce(
   (sum, item) => sum + item.jumlah,
@@ -51,13 +56,30 @@ const totalPengunjung = filteredData.reduce(
           👥 Data Pengunjung
         </h1>
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
-
-          <input
-            type="date"
-            value={tanggalFilter}
-            onChange={(e) => setTanggalFilter(e.target.value)}
-            className="border border-slate-300 px-4 py-2 rounded-xl bg-white"
-          />
+          <div className="flex flex-wrap gap-3">
+            <div>
+              <label className="block text-xs font-bold text-slate-500 mb-1">
+                Dari
+              </label>
+              <input
+                type="date"
+                value={tanggalAwal}
+                onChange={(e) => setTanggalAwal(e.target.value)}
+                className="border border-slate-300 px-4 py-2 rounded-xl bg-white"
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-slate-500 mb-1">
+                Sampai
+              </label>
+              <input
+                type="date"
+                value={tanggalAkhir}
+                onChange={(e) => setTanggalAkhir(e.target.value)}
+                className="border border-slate-300 px-4 py-2 rounded-xl bg-white"
+              />
+            </div>
+          </div>
 
           <button
             onClick={() => window.print()}
@@ -65,7 +87,6 @@ const totalPengunjung = filteredData.reduce(
           >
             🖨️ Cetak Laporan
           </button>
-
         </div>
 
         {/* TABEL + TOTAL */}
