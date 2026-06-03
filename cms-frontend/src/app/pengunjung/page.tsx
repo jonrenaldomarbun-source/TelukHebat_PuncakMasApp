@@ -48,6 +48,10 @@ const totalPengunjung = filteredData.reduce(
   (sum, item) => sum + item.jumlah,
   0
 );
+const totalPemasukan = filteredData.reduce(
+  (sum, item) => sum + (item.total || 0),
+  0
+);
 
   return (
     <div className="min-h-screen bg-[#f8fafc] p-8 font-sans">
