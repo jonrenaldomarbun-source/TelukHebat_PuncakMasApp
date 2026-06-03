@@ -53,6 +53,14 @@ const totalPemasukan = filteredData.reduce(
   0
 );
 
+
+const formatRupiah = (angka: number) => {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    maximumFractionDigits: 0,
+  }).format(angka);
+};
   return (
     <div className="min-h-screen bg-[#f8fafc] p-8 font-sans">
       <div className="max-w-6xl mx-auto">
