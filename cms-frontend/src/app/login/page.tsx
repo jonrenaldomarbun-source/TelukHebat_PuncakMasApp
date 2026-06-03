@@ -51,7 +51,7 @@ export default function Login() {
   const salinKeClipboard = () => {
     navigator.clipboard.writeText(tokenResult);
 
-    localStorage.setItem("isLogin", "true");
+    sessionStorage.setItem("isLogin", "true");
 
     alert("Token berhasil disalin!");
 
