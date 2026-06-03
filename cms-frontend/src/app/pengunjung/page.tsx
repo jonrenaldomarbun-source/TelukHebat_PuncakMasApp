@@ -67,6 +67,20 @@ const totalPengunjung = filteredData.reduce(
   (sum, item) => sum + item.jumlah,
   0
 );
+
+//Chart Data
+const chartData = {
+  labels: filteredData.map((item) =>
+    new Date(item.tanggal).toLocaleDateString("id-ID")
+  ),
+  datasets: [
+    {
+      label: "Jumlah Pengunjung",
+      data: filteredData.map((item) => item.jumlah),
+    },
+  ],
+};
+
 const totalPemasukan = filteredData.reduce(
   (sum, item) => sum + (item.total || 0),
   0
