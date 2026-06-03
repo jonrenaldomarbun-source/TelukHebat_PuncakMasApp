@@ -7,7 +7,7 @@ export default function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    const isLogin = localStorage.getItem("isLogin");
+    const isLogin = sessionStorage.getItem("isLogin");
 
     if (!isLogin) {
       router.push("/login");
