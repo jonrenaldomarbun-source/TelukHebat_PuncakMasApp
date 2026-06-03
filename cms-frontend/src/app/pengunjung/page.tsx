@@ -86,7 +86,7 @@ const totalPengunjung = filteredData.reduce(
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 overflow-y-auto">
-                      {data.map((item) => (
+                      {filteredData.map((item) => (
                         <tr key={item.id} className="hover:bg-slate-50 transition-colors">
                           <td className="p-4">
                             <span className="text-xs font-mono bg-slate-100 px-2 py-1 rounded text-slate-500">
