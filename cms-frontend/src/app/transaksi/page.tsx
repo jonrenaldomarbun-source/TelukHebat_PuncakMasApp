@@ -193,10 +193,10 @@ export default function Transaksi() {
 
           {/* TABLE */}
           <div className="lg:col-span-8">
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden h-[420px]">
-              <div className="overflow-y-auto h-[420px]">
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden h-[315px]">
+              <div className="overflow-y-auto h-[315px]">
                  <table className="w-full text-left">
-                  <thead>
+                  <thead className="sticky top-0 bg-slate-50 z-10">
                     <tr className="bg-slate-50 text-slate-400 text-[10px] uppercase font-black tracking-widest border-b">
                       <th className="p-4">Tanggal</th>
                       <th className="p-4">Pengunjung</th>
