@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 type PengunjungType = {
   id: number;
   jumlah: number;
+  total:number;
   tanggal: string;
 };
 
