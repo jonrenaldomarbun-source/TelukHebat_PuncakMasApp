@@ -58,16 +58,16 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
 
           <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 relative overflow-hidden group">
-            <div className="absolute -right-4 -top-4 text-6xl opacity-10">📝</div>
-            <p className="text-xs font-black uppercase text-slate-400 mb-1">
+            <div className="absolute -right-2 -top-2 text-5xl opacity-20">📝</div>
+            <p className="text-xs font-black uppercase text-slate-900 mb-1">
               Total Transaksi
             </p>
             <h2 className="text-4xl font-black">{totalTransaksi}</h2>
           </div>
 
           <div className="bg-blue-600 p-6 rounded-[2rem] shadow-xl text-white relative overflow-hidden">
-            <div className="absolute -right-4 -top-4 text-6xl opacity-20">💰</div>
-            <p className="text-xs font-black uppercase text-blue-200 mb-1">
+            <div className="absolute -right-2 -top-2 text-5xl opacity-20">💰</div>
+            <p className="text-xs font-black uppercase text-blue-100 mb-1">
               Total Pemasukan
             </p>
             <h2 className="text-3xl font-black">
@@ -76,7 +76,7 @@ export default function Dashboard() {
           </div>
 
           <div className="bg-white p-6 rounded-[2rem] shadow-sm border border-slate-100 relative overflow-hidden">
-            <div className="absolute -right-4 -top-4 text-6xl opacity-10">👥</div>
+            <div className="absolute -right-2 -top-2 text-5xl opacity-20">👥</div>
             <p className="text-xs font-black uppercase text-slate-400 mb-1">
               Total Pengunjung
             </p>
@@ -86,8 +86,8 @@ export default function Dashboard() {
         </div>
 
         {/* SISTEM OPERASIONAL (CENTER) */}
-        <div className="flex justify-center">
-          <div className="w-full md:w-2/3 lg:w-1/2 bg-slate-900 p-8 rounded-[2.5rem] shadow-2xl text-white relative overflow-hidden">
+        <div className="flex justify-left">
+          <div className="w-full md:w-2/3 lg:w-1/2 bg-slate-800 p-8 rounded-[2.5rem] shadow-2xl text-white relative overflow-hidden">
 
             <div className="relative z-10 text-center">
               <h3 className="text-xl font-black mb-2">
