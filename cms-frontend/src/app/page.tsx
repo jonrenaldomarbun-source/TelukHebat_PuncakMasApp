@@ -20,7 +20,7 @@ export default function Home() {
       <button
         onClick={() => {
           localStorage.removeItem("admin_token");
-          localStorage.removeItem("isLogin");
+          sessionStorage.removeItem("isLogin");
           router.push("/login");
         }}
         className="absolute top-6 right-6 bg-red-500 text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-red-600"
