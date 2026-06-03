@@ -50,7 +50,7 @@ export default function Pengunjung() {
             ) : (
               <div className="overflow-y-auto h-[420px]">
                  <table className="w-full text-left">
-                    <thead>
+                    <thead className="sticky top-0 z-10 bg-slate-50">
                       <tr className="bg-slate-50 text-slate-400 text-[10px] uppercase font-black tracking-widest border-b">
                         <th className="p-4">Tanggal</th>
                         <th className="p-4 text-center">Jumlah</th>
