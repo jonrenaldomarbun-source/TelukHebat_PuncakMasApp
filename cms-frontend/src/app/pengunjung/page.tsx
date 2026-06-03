@@ -207,10 +207,19 @@ const formatRupiah = (angka: number) => {
                 Grafik Mingguan
               </h3>
 
-              <div className="h-40 bg-slate-50 rounded-2xl flex items-center justify-center border-2 border-dashed border-slate-200">
-                <p className="text-slate-400 text-sm font-bold italic">
-                  Belum ada grafik
-                </p>
+              <div className="h-64">
+                <Bar
+                  data={chartData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: {
+                        display: false,
+                      },
+                    },
+                  }}
+                />
               </div>
             </div>
 
