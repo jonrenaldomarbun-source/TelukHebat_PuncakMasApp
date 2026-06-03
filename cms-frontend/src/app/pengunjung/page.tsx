@@ -31,7 +31,17 @@ export default function Pengunjung() {
     fetchData();
   }, []);
 
-  const totalPengunjung = data.reduce((sum, item) => sum + item.jumlah, 0);
+  const filteredData = tanggalFilter
+  ? data.filter(
+      (item) =>
+        new Date(item.tanggal).toISOString().split("T")[0] === tanggalFilter
+    )
+  : data;
+
+const totalPengunjung = filteredData.reduce(
+  (sum, item) => sum + item.jumlah,
+  0
+);
 
   return (
     <div className="min-h-screen bg-[#f8fafc] p-8 font-sans">
