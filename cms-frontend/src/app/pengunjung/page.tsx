@@ -50,6 +50,23 @@ const totalPengunjung = filteredData.reduce(
         <h1 className="text-3xl font-extrabold text-slate-900 mb-8 text-center">
           👥 Data Pengunjung
         </h1>
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+
+          <input
+            type="date"
+            value={tanggalFilter}
+            onChange={(e) => setTanggalFilter(e.target.value)}
+            className="border border-slate-300 px-4 py-2 rounded-xl bg-white"
+          />
+
+          <button
+            onClick={() => window.print()}
+            className="bg-blue-600 text-white px-5 py-2 rounded-xl font-bold hover:bg-blue-700"
+          >
+            🖨️ Cetak Laporan
+          </button>
+
+        </div>
 
         {/* TABEL + TOTAL */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
