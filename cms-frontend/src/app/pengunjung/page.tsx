@@ -10,6 +10,7 @@ type PengunjungType = {
 export default function Pengunjung() {
   const [data, setData] = useState<PengunjungType[]>([]);
   const [loading, setLoading] = useState(false);
+  const [tanggalFilter, setTanggalFilter] = useState("");
 
   const API_URL = "http://localhost:3000/wisata";
 
