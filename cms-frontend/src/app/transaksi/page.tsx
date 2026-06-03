@@ -209,7 +209,11 @@ export default function Transaksi() {
                     {data.length > 0 ? (
                       data.map((item) => (
                         <tr key={item.id} className="hover:bg-slate-50 transition-colors">
-                          <td className="p-4 text-xs font-mono text-slate-400">{item.tanggal}</td>
+                          <td className="p-4">
+                            <span className="text-xs font-mono bg-slate-100 px-2 py-1 rounded text-slate-500">
+                               {new Date(item.tanggal).toLocaleDateString("id-ID")}
+                            </span>
+                          </td>
                           <td className="p-4 font-bold text-slate-700">{item.nama}</td>
                           <td className="p-4 text-slate-500">{item.jumlah}x</td>
                           <td className="p-4 text-right font-black text-blue-600">{formatRupiah(item.total)}</td>
