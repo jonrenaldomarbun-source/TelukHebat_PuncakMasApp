@@ -176,7 +176,7 @@ const formatRupiah = (angka: number) => {
                           <td className="p-4 text-center font-bold text-slate-800">
                             {item.jumlah}
                           </td>
-                          <td className="p-4 text-right">
+                          <td className="p-4 text-right print:hidden">
                             <span className="bg-green-100 text-green-600 text-[10px] font-bold px-3 py-1 rounded-full uppercase">
                               Recorded
                             </span>
