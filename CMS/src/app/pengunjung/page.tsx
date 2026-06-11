@@ -101,6 +101,19 @@ const formatRupiah = (angka: number) => {
         <h1 className="text-3xl font-extrabold text-slate-900 mb-8 text-center">
           👥 Data Pengunjung
         </h1>
+        <div className="hidden print:block text-center mb-6">
+          <h2 className="text-2xl font-bold">
+            LAPORAN PENGUNJUNG PUNCAK MAS
+          </h2>
+
+          <p>
+            Periode:
+            {" "}
+            {tanggalAwal || "-"}
+            {" s/d "}
+            {tanggalAkhir || "-"}
+          </p>
+        </div>
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
           <div className="flex flex-wrap gap-3 print:hidden">
             <div>
