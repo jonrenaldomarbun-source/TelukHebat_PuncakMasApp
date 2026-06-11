@@ -143,7 +143,7 @@ const formatRupiah = (angka: number) => {
             {loading ? (
               <p className="p-6 text-center text-slate-400">Loading...</p>
             ) : (
-              <div className="overflow-y-auto h-[420px]">
+              <div className="overflow-y-auto h-[420px] print:h-auto print:overflow-visible">
                  <table className="w-full text-left">
                     <thead className="sticky top-0 z-10 bg-slate-50">
                       <tr className="bg-slate-50 text-slate-400 text-[10px] uppercase font-black tracking-widest border-b">
