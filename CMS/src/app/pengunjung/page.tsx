@@ -136,7 +136,7 @@ const formatRupiah = (angka: number) => {
         </div>
 
         {/* TABEL + TOTAL */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 print:block">
 
           {/* TABEL */}
           <div className="md:col-span-2 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden h-[420px] flex flex-col">
