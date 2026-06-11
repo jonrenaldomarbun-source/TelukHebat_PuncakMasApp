@@ -162,7 +162,7 @@ const formatRupiah = (angka: number) => {
                       <tr className="bg-slate-50 text-slate-400 text-[10px] uppercase font-black tracking-widest border-b">
                         <th className="p-4">Tanggal</th>
                         <th className="p-4 text-center">Jumlah</th>
-                        <th className="p-4 text-right">Status</th>
+                        <th className="p-4 text-right print:hidden">Status</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100 overflow-y-auto">
@@ -212,9 +212,7 @@ const formatRupiah = (angka: number) => {
                   </span>
                 </div>
               </div>
-            </div>
-            
-            {/* GRAFIK */}
+            </div> 
             {/* GRAFIK */}
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center print:hidden">
               <h3 className="text-lg font-black mb-4">
