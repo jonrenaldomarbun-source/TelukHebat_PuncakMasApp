@@ -94,11 +94,12 @@ const formatRupiah = (angka: number) => {
     maximumFractionDigits: 0,
   }).format(angka);
 };
+const tanggalCetak = new Date().toLocaleDateString("id-ID");
   return (
     <div className="min-h-screen bg-[#f8fafc] p-8 font-sans">
       <div className="max-w-6xl mx-auto">
 
-        <h1 className="text-3xl font-extrabold text-slate-900 mb-8 text-center">
+        <h1 className="text-3xl font-extrabold text-slate-900 mb-8 text-center print:hidden">
           👥 Data Pengunjung
         </h1>
         <div className="hidden print:block text-center mb-6">
@@ -214,7 +215,7 @@ const formatRupiah = (angka: number) => {
               </div>
             </div> 
             {/* GRAFIK */}
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center print:hidden">
+            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center print:block">
               <h3 className="text-lg font-black mb-4">
                 Grafik Mingguan
               </h3>
