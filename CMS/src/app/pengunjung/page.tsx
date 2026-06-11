@@ -102,7 +102,7 @@ const formatRupiah = (angka: number) => {
           👥 Data Pengunjung
         </h1>
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-3 print:hidden">
             <div>
               <label className="block text-xs font-bold text-slate-500 mb-1">
                 Dari
