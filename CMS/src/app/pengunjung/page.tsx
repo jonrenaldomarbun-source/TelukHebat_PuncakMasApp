@@ -102,17 +102,17 @@ const tanggalCetak = new Date().toLocaleDateString("id-ID");
         <h1 className="text-3xl font-extrabold text-slate-900 mb-8 text-center print:hidden">
           👥 Data Pengunjung
         </h1>
-        <div className="hidden print:block text-center mb-6">
+        <div className="hidden print:block text-center mb-8">
           <h2 className="text-2xl font-bold">
             LAPORAN PENGUNJUNG PUNCAK MAS
           </h2>
 
           <p>
-            Periode:
-            {" "}
-            {tanggalAwal || "-"}
-            {" s/d "}
-            {tanggalAkhir || "-"}
+            Periode: {tanggalAwal || "-"} s/d {tanggalAkhir || "-"}
+          </p>
+
+          <p className="text-sm mt-2">
+            Tanggal Cetak: {tanggalCetak}
           </p>
         </div>
         <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
