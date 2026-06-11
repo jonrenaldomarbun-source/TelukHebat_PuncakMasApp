@@ -179,7 +179,7 @@ const formatRupiah = (angka: number) => {
           {/* TOTAL (READ ONLY) */}
           <div className="flex flex-col gap-6 print:w-full">
 
-            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+            <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm print:mt-6">
               <p className="text-xs uppercase font-bold text-slate-500 mb-2">
                 Ringkasan Laporan
               </p>
