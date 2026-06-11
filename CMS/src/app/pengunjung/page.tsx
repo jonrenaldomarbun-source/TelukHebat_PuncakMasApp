@@ -129,7 +129,7 @@ const formatRupiah = (angka: number) => {
 
           <button
             onClick={() => window.print()}
-            className="bg-blue-600 text-white px-5 py-2 rounded-xl font-bold hover:bg-blue-700"
+            className="bg-blue-600 text-white px-5 py-2 rounded-xl font-bold hover:bg-blue-700 print:hidden"
           >
             🖨️ Cetak Laporan
           </button>
@@ -177,7 +177,7 @@ const formatRupiah = (angka: number) => {
           </div>
 
           {/* TOTAL (READ ONLY) */}
-          <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-6 print:w-full">
 
             <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
               <p className="text-xs uppercase font-bold text-slate-500 mb-2">
