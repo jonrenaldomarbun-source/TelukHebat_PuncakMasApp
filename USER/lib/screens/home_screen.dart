@@ -667,11 +667,6 @@ class _TransaksiTabState extends State<TransaksiTab> {
     setState(() => _future = _service.fetchAllWisata());
   }
 
-  Future<void> _delete(int id) async {
-    await _service.deleteTransaksi(id);
-    _refresh();
-  }
-
   String _formatDate(String value) {
     try {
       return DateFormat('dd MMM yyyy', 'id_ID').format(DateTime.parse(value));
@@ -773,19 +768,11 @@ class _TransaksiTabState extends State<TransaksiTab> {
                 ),
               ),
               const SizedBox(height: 8),
-              SizedBox(
+              const SizedBox(
                 width: 38,
                 height: 38,
-                child: IconButton(
-                  onPressed: () => _delete(item.id),
-                  icon: const Icon(
-                    Icons.delete_outline_rounded,
-                    color: Colors.redAccent,
-                    size: 22,
-                  ),
-                  padding: EdgeInsets.zero,
-                  splashRadius: 24,
-                ),
+                // Fitur hapus transaksi hanya tersedia di CMS admin, bukan di aplikasi pengunjung.
+                child: SizedBox.shrink(),
               ),
             ],
           ),

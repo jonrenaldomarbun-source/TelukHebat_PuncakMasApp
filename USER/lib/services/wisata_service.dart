@@ -73,12 +73,13 @@ class WisataService {
     });
 
     try {
+      // POST /wisata saat ini masih dijaga oleh JWT admin pada API.
+      // TODO: Koordinasi dengan tim API agar POST /wisata dijadikan endpoint publik untuk transaksi pengunjung.
       final response = await http
           .post(
             url,
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': 'Admin123',
             },
             body: body,
           )
@@ -97,16 +98,15 @@ class WisataService {
   }
 
   /// DELETE: Hapus transaksi
+  @Deprecated(
+      'Fitur hapus transaksi hanya tersedia untuk admin CMS. Pengunjung tidak boleh memanggil method ini.')
   Future<void> deleteTransaksi(int id) async {
+    // Operasi hapus tidak boleh dipanggil dari sisi pengunjung; hanya admin CMS yang berhak menghapus transaksi.
     final Uri url = Uri.parse('$_baseUrl/wisata/$id');
 
     try {
-      final response = await http.delete(
-        url,
-        headers: {
-          'Authorization': 'Admin123',
-        },
-      ).timeout(const Duration(seconds: 10));
+      final response =
+          await http.delete(url).timeout(const Duration(seconds: 10));
 
       if (response.statusCode == 200 || response.statusCode == 204) {
         return;

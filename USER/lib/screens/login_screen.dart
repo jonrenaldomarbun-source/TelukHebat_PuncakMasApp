@@ -15,7 +15,13 @@ class _LoginScreenState extends State<LoginScreen> {
   bool _isLoading = false;
   String? _errorMessage;
 
-  // Dummy credentials
+  // [DEMO MODE] Login pengunjung menggunakan akun demo lokal.
+  // Sistem ini tidak memiliki tabel akun pengunjung di database API.
+  // Pengunjung mengakses endpoint publik (GET /wisata) tanpa memerlukan
+  // autentikasi API.
+  //
+  // TODO: Jika fitur akun pengunjung dibutuhkan di masa depan,
+  // ganti dengan pemanggilan POST /auth/user/login ke API.
   static const String _dummyUsername = 'Budi';
   static const String _dummyPassword = 'Budi123';
 
